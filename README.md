@@ -5,7 +5,7 @@
 DFPlayers are inexpensive and they have a serial interface. This makes them ideal for use in IOT projects.
 
 While it is true that the DFPlayer can be used without a library, it is also true that a library can make the DFPlayer much easier to use. This library lets developers use intuitive commands to control the DFPlayer. *If you have ever used an MP3 player, you already know how to use the DFPlay library* ... but DFPlay also provides enhanced functionality. For example: 
-* The DFPlay library has one command to play content. The ***play()*** command plays a "Selection" which selects the content to be played, and permits volume and equalizer settings to be specified for the duration of the Selection's play. It is also possible to organize selections into playlists for those who want to take things to that level.
+* The DFPlay library has one command to play content. The ***play()*** command plays a "Selection" which selects the content to be played, and permits volume and equalizer settings to be asjusted for the duration of the Selection's play. It is also possible to organize selections into playlists for those who want to take things to that level.
 * Mute and unMute functionality was added.
 * New softStop functionality tells DFPlayer to stop playing when the current track ends 
 * Developers have Instant access to DFPlayer state information with methods like:  *isPlaying()*, *isPaused()*, *isIdle()*, and *isMuted()*
@@ -17,21 +17,21 @@ DFPlay manages the DFPlayer based on ***state*** variables which are stored in m
 
 DFPlay has one method ***manageDevice()*** that handles ALL of the communication with the DFPlayer. Each time manageDevice() is called, it asks two questions: 
 1. Have I received any data from the DFPlayer?
-2. Are there any state changes pending?
+2. Do I need to send a command to the DFPlayer?
 
-Over 99.99% of the time, both answers are no, and manageDevice() simply exits. 
+Over 99.9% of the time, both answers are no, and manageDevice() simply exits. 
 
 When the answer to the first question is yes, manageDevice() updates state variables based on the data it received.
 
 When the answer to the second question is yes, manageDevice() will:
-* exit if it is too soon to send another command to the DFPlayer
-* evaluate state variables based on a set of rules which compare the DFPlayer's current state to the desired state as defined by calls to other DFPlay methods
-* send one command to the DFPlayer when non-compliance is found
+* exit if it is too soon to send another command to the DFPlayer.
+* evaluate state variables based on a set of rules which compare current and desired states to search for non-compliance.
+* send one command to the DFPlayer when the first non-compliance is found
 * exit
 
-When multiple commands are required to bring DFPlayer in compliance, manageDevice() nudges the DFPlayer into compliance each time it is executed in loop() or by a software timer. The code path taken to perform each nudge is short, and the DFPlayer is not very chatty, so manageDevice() has very little impact on applications that use this library. 
+When multiple commands are required to bring DFPlayer into compliance, manageDevice() gives DFPlayer at least 30ms to process one command before another command is submitted, and each command is executed in a separate execution of the manageDevice() method. 
 
-DFPlay has many other methods. These methods merely update or return state variables in memory, so all return instantly. 
+All other DFPlay methods simply update state variables in memory, or return data based on them. This allows them to return almost instantly. 
 
 Please follow these links for additional information:
 
