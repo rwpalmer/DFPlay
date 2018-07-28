@@ -39,8 +39,7 @@ All other DFPlay methods simply update state variables in memory, or return data
 
 Please follow these links for additional information:
 
- - DFPlay QuickStart Guide
- - DFPlay Code Samples
- - DFPlay Usage Examples
+ - [DFPlay QuickStart Guide](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub)
+ - DFPlay Examples
 
 > Written with [StackEdit](https://stackedit.io/).
