@@ -43,8 +43,10 @@ class DesiredState {
         uint8_t		volume;     	// the default volume state (0 to 30) ... may be adjusted by selection.volAdj
         bool        newSelection;	// when true, the selection has been updated via the play command
         bool		muted;			// when true, desired state is muted
-        bool		softStop;      	// when true, play will stop when the current track ends
-};
+        bool		softStop;       // when true, play will stop when the current track ends
+        bool        repeat;         // when true, selection play will repeat
+        bool        nextTrack;      // when true, skip to next track
+    };
 
 class CurrentState {
 	// this object is maintained to reflect the DFPlayer's current state
@@ -56,15 +58,20 @@ class CurrentState {
         uint8_t		playType;       // the current play type (STANDARD, HUGE, MP3, FOLDER, MEDIA)      
         bool		usbAttached;	// true indicates that a USB key is attached to the DFPlayer
         bool		sdAttached;		// true indicates that an SD card is attached to the DFPlayer
+        bool        sleeping;       // true indicates that the DFPlayer is in low-power mode
+        bool        changePending;  // true tells manageDevice() that a state change is pending
+        bool        firstEot;        // true identifies first End-Of-Track frame 
 		uint32_t	noSubmitsTil;	// the time when the DFPlayer will be ready to accept the next command
-        uint32_t	trackCount;     // the number of tracks remaining to play when playing a folder or the media
+		uint32_t    tracks;         // the number of tracks in a folder or media selection
+        uint32_t	trackCount;     // the number of tracks that have been played in a folder or media selection
+        uint32_t    idleMillis;     // millis when cState.playState was set to IDLE
 };		
 
 class DFPlay {
     private:
     //  CLASS CONSTANTS
         static const uint8_t USB = 1, SD = 2, SLEEP = 10; // Media state
-        static const uint8_t IDLE = 0, PLAYING = 1, PAUSED = 2, FAILED = 3;    // Play state
+        static const uint8_t IDLE = 0, PLAYING = 1, PAUSED = 2, INITIALIZE = 3;   // Play state
         static const uint16_t SUBMIT_INTERVAL = 30; // standard interval between frames submitted to DFPlayer (milliseconds)
         static const uint8_t TBD = 0, STANDARD = 1, HUGE = 2, MP3 = 3, FOLDER = 4, MEDIA = 5; // PlayType
         static const uint8_t RESPONSE_FRAME_SIZE = 10;
@@ -85,20 +92,25 @@ class DFPlay {
         void play(Selection&);
         void pause(void);
         void resume(void);
+        void repeatOn(void);
+        void repeatOff(void);
         void stop(void);
         void softStop(void);
+        void next(void);
         uint8_t setVolume(uint8_t);
         uint8_t volumeUp(void);
         uint8_t volumeDown(void);
         uint8_t setEqualizer(uint8_t);
         uint8_t equalizerUp(void);
         uint8_t equalizerDown(void);
-        void mute(void);
-        void unmute(void);
+        void muteOn(void);
+        void muteOff(void);
         bool isMuted(void);
         bool isIdle(void);
         bool isPlaying(void);
         bool isPaused(void);
+        bool isRepeating(void);
+        bool isSleeping(void);
         void manageDevice(void);
 };
 #endif
