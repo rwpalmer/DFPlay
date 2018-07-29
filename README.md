@@ -1,17 +1,18 @@
 
 # ***DFPlay***
-## *An Enhanced Library for the DFPlayer*
+ ***An Enhanced Library for the DFPlayer***
 
-### *Overview*
+## *Overview*
 DFPlayers are inexpensive and they have a serial interface. This makes them ideal for use in IOT projects.
 
 While it is true that the DFPlayer can be used without a library, it is also true that a library can make the DFPlayer much easier to use. This library lets developers use intuitive commands to control the DFPlayer. *If you have ever used an MP3 player, you already know how to use the DFPlay library*. DFPlay also provides enhanced functionality. For example: 
-* DFPlay plays all content with one ***play(*** Selecton ***)*** command, where "Selection" defines the content to be played and allows volume and equalizers settings to be adjusted before the content plays.  This addresses a common audio playback problem, where some content plays louder than other content. It also makes it possible to change equalizer settings automatically as content changes. Those who might want to take things to the next level can create playlists as arrays / vectors of selections. (example: DFPlaylist.ini). 
+* DFPlay plays all content with one ***play(*** Selection ***)*** command, where "Selection" defines the content to be played and allows volume and equalizers settings to be adjusted while the content plays.  This addresses a common audio playback problem, where some content plays louder than other content. It also makes it possible to change equalizer settings automatically as content changes. Those who might want to take things to the next level can create playlists as arrays or vectors of selections. 
+
 * Mute and unMute functionality was added.
 * New softStop functionality tells DFPlayer to stop playing when the current track ends 
 * Developers have Instant access to DFPlayer state information with methods like:  *isPlaying()*, *isPaused()*, *isIdle()*, and *isMuted()*.
 * DFPlay seamlessly shifts the DFPlayer  to low-power "sleep" state when the device has been idle for 2 seconds, and seamlessly shifts back to the normal power state when the next play()* method is called.
-### *Architecture*
+## *Architecture*
 ##### DFPlay provides high-performance device control, but consumes minimal resources.
 DFPlay manages the DFPlayer based on ***state*** variables which are stored in memory. Some of these variables describe a "desired state" , and some describe the "current state" of the DFPlayer.
 
@@ -37,7 +38,7 @@ DFPlayer needs time to process each command it receives. Most commands complete 
 
 All other DFPlay methods simply update state variables in memory, or return data based on state variables. All return instantly. 
 
-### *Usage Information*
+## *Usage Information*
 The DFPlay QuickStart Guide provides more detailed information about DFPlay commands, and the Selection object that is used to identify the content to be played on the DFPlayer:     [DFPlay QuickStart Guide](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub)
  
  There are four sample programs in the GitHub "examples" folder. 
@@ -60,5 +61,8 @@ Allows you to create and play a "playlist" ... which is an array (or vector) of 
 Plays one track when the door closes, and another track when the door opens ... and every five minutes while the door is open. Door status is toggled via a Particle Function and the Particle Console. 
 
 In this case, the selected tracks are hard-coded, so you will need to modify the track selections to conform with your media. 
+## *Project Status*
+Initial release is in final testing ... Planned release in September 2018
+Please report any issues and provide comments if you  decide to give it a try.  
 
 > Written with [StackEdit](https://stackedit.io/).
