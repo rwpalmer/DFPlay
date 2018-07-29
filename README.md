@@ -37,9 +37,28 @@ DFPlayer needs time to process each command it receives. Most commands complete 
 
 All other DFPlay methods simply update state variables in memory, or return data based on state variables. All return instantly. 
 
-Please follow these links for additional information:
+### *Usage Information*
+The DFPlay QuickStart Guide provides more detailed information about DFPlay commands, and the Selection object that is used to identify the content to be played on the DFPlayer:     [DFPlay QuickStart Guide](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub)
+ 
+ There are four sample programs in the GitHub "examples" folder. 
+#### PlaySD.ino
+Plays all of the tracks on SD media without any programming. Simply compile the example, insert the SD media into the DFPlayer, and it will begin to play. If you don't have an SD ready, just rip a DVD to the media and insert it into the DFPlayer. You do not need to reorganize the content, rename folders or files.
 
- - [DFPlay QuickStart Guide](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub)
- - DFPlay Examples
+This is a great program for initial testing of the DFPlayer ... to make sure your wiring is correct.
+
+##### For the remaining examples folders and tracks need to be named based on DFPlayer requirements. For details, refer to the "*How DFPlay plays tracks, and Media Requirements*" topic within the DFPlay QuickStart Guide. 
+
+#### PlaySelection.ino
+Plays individual selections, where each selection can play individual tracks, folders, or everything on the media. Again, no programming is involved. Selections are entered via a Particle Function and the Particle Console.  
+
+A second Particle Function that allows you to invoke DFPlay methods by entering commands like "play", "stop", "pause", "resume", etc. All of the commands are documented in comments within the .ino file. 
+
+#### PlayList.ino
+Allows you to create and play a "playlist" ... which is an array (or vector) of selections. Once again .,. no programming is required. You simply enter the selections via a Particle Function and the Particle Console. Activity is logged to the Serial Console. 
+
+#### DoorAlarm.ino
+Plays one track when the door closes, and another track when the door opens ... and every five minutes while the door is open. Door status is toggled via a Particle Function and the Particle Console. 
+
+In this case, the selected tracks are hard-coded, so you will need to modify the track selections to conform with your media. 
 
 > Written with [StackEdit](https://stackedit.io/).
