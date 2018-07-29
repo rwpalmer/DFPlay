@@ -1,17 +1,25 @@
 
+
 # ***DFPlay***
  ***An Enhanced Library for the DFPlayer***
 
 ## *Overview*
 DFPlayers are inexpensive and they have a serial interface. This makes them ideal for use in IOT projects.
 
-While it is true that the DFPlayer can be used without a library, it is also true that a library can make the DFPlayer much easier to use. This library lets developers use intuitive commands to control the DFPlayer. *If you have ever used an MP3 player, you already know how to use the DFPlay library*. DFPlay also provides enhanced functionality. For example: 
-* DFPlay plays all content with one ***play(*** Selection ***)*** command, where "Selection" defines the content to be played and allows volume and equalizers settings to be adjusted while the content plays.  This addresses a common audio playback problem, where some content plays louder than other content. It also makes it possible to change equalizer settings automatically as content changes. Those who might want to take things to the next level can create playlists as arrays or vectors of selections. 
+While it is true that the DFPlayer can be used without a library, it is also true that a library can make the DFPlayer much easier to use. This library's methods mirror the buttons that you would find on a portable MP3 player.  Methods like"play()", "stop()", "pause()", and "resume()",  control the DFPlayer and mask the complexity of the DFPlayer's native command set.  DFPlay also provides enhanced functionality. For example: 
+* DFPlay plays all content with one ***play(*** Selection ***)*** command, where "Selection":
+	*  defines the content to be played
+	* allows the volume setting to be adjusted for the duration of content play.  This addresses a common audio playback problem, where some content plays louder than other content. It also makes it simple to play some content (say an alarm) louder than other content.
+	* allows the equalizer setting to be adjusted for the duration of content play
+	* enables the use of playlists (demonstrated in the playList.ino example). 
 
-* Mute and unMute functionality was added.
-* New softStop functionality tells DFPlayer to stop playing when the current track ends 
+* New muteOn() and muteOff() functionality was added.
+* New softStop functionality tells DFPlayer to stop playing when the current track ends.
 * Developers have Instant access to DFPlayer state information with methods like:  *isPlaying()*, *isPaused()*, *isIdle()*, and *isMuted()*.
-* DFPlay seamlessly shifts the DFPlayer  to low-power "sleep" state when the device has been idle for 2 seconds, and seamlessly shifts back to the normal power state when the next play()* method is called.
+* Low-power "sleep" mode is automatically enabled after the device has been idle for 2 seconds, and seamlessly disabled when the next play()* method is called.
+
+If you do decide to use the DFPlayer without a library, you may still benefit from the information displayed when you execute the playSelection.ino example with logging turned on. See the DFPlay QuickStart Guide for details. 
+
 ## *Architecture*
 ##### DFPlay provides high-performance device control, but consumes minimal resources.
 DFPlay manages the DFPlayer based on ***state*** variables which are stored in memory. Some of these variables describe a "desired state" , and some describe the "current state" of the DFPlayer.
@@ -27,7 +35,7 @@ When the answer to the first question is yes, manageDevice() updates state varia
 
 When the answer to the second question is yes, manageDevice() will perform the following tasks:
 
- 1. exit if it is too soon to send another command to the DFPlayer.
+ 1. exit immediately if it is too soon to send another command to the DFPlayer.
  2. evaluate state variables based on a set of rules which compare current and desired states to search for non-compliance.
  3. send a command to the DFPlayer to correct the first non-compliance found.
  4. exit immediately after the first command is sent. 
@@ -39,11 +47,11 @@ DFPlayer needs time to process each command it receives. Most commands complete 
 All other DFPlay methods simply update state variables in memory, or return data based on state variables. All return instantly. 
 
 ## *Usage Information*
-The DFPlay QuickStart Guide provides more detailed information about DFPlay commands, and the Selection object that is used to identify the content to be played on the DFPlayer:     [DFPlay QuickStart Guide](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub)
+The DFPlay QuickStart Guide provides more detailed information about DFPlay commands, and the Selection object that is used to identify the content to be played on the DFPlayer:     [******DFPlay QuickStart*** Guide***](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub)
  
  There are four sample programs in the GitHub "examples" folder. 
 #### PlaySD.ino
-Plays all of the tracks on SD media without any programming. Simply compile the example, insert the SD media into the DFPlayer, and it will begin to play. If you don't have an SD ready, just rip a DVD to the media and insert it into the DFPlayer. You do not need to reorganize the content, rename folders or files.
+Plays all of the tracks on SD media without any programming. Simply compile the example, insert the SD media into the DFPlayer, and it will begin to play. If you don't have an SD ready, you can just rip a CD/DVD to the media and insert it into the DFPlayer. You do not need to reorganize the content, rename folders or files.
 
 This is a great program for initial testing of the DFPlayer ... to make sure your wiring is correct.
 
@@ -62,7 +70,7 @@ Plays one track when the door closes, and another track when the door opens ... 
 
 In this case, the selected tracks are hard-coded, so you will need to modify the track selections to conform with your media. 
 ## *Project Status*
-Initial release is in final testing ... Planned release in September 2018
-Please report any issues and provide comments if you  decide to give it a try.  
+The initial release of DFPlay is in final testing ... Planned release in September 2018
+RC1 is posted. Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
 
 > Written with [StackEdit](https://stackedit.io/).
