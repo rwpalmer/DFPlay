@@ -21,7 +21,6 @@ class Selection {
             if ((this->media == b.media) && (this->folder == b.folder) && (this->track == b.track))  return false;
             else  return true;
         }
-        
         Selection operator=(const Selection &rt) { // NOTE: = copies all data elements.
             if (this != &rt) {
                 this->media = rt.media;
@@ -45,7 +44,7 @@ class DesiredState {
         bool		muted;			// when true, desired state is muted
         bool		softStop;       // when true, play will stop when the current track ends
         bool        repeat;         // when true, selection play will repeat
-        bool        nextTrack;      // when true, skip to next track
+        bool        skip;           // when true, skip to next track
     };
 
 class CurrentState {
@@ -60,7 +59,7 @@ class CurrentState {
         bool		sdAttached;		// true indicates that an SD card is attached to the DFPlayer
         bool        sleeping;       // true indicates that the DFPlayer is in low-power mode
         bool        changePending;  // true tells manageDevice() that a state change is pending
-        bool        firstEot;        // true identifies first End-Of-Track frame 
+        bool        firstEot;       // true identifies first End-Of-Track frame 
 		uint32_t	noSubmitsTil;	// the time when the DFPlayer will be ready to accept the next command
 		uint32_t    tracks;         // the number of tracks in a folder or media selection
         uint32_t	trackCount;     // the number of tracks that have been played in a folder or media selection
@@ -96,7 +95,7 @@ class DFPlay {
         void repeatOff(void);
         void stop(void);
         void softStop(void);
-        void next(void);
+        void skip(void);
         uint8_t setVolume(uint8_t);
         uint8_t volumeUp(void);
         uint8_t volumeDown(void);

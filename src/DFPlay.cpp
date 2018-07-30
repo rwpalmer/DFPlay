@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DFPlay.cpp 
-    Version:    0.0.2  7/28/18
+    Version:    0.0.2  7/12/18
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 */    
@@ -23,8 +23,8 @@ void DFPlay::begin(void) {    //  initialize class members and query DFPlayer to
     this->dState.muted = false;
     this->dState.repeat = false;
     this->dState.softStop = false;
-    this->dState.nextTrack = false;
-    this->cState.playState = INITIALIZE;
+    this->dState.skip = false;
+    this->cState.playState = INITIALIZE; // <-- tells manageDevice() to perform the DFPlayer initialization sequence
     this->cState.equalizer = 0;
     this->cState.volume = 30;
     this->cState.media = 0;
@@ -37,6 +37,7 @@ void DFPlay::begin(void) {    //  initialize class members and query DFPlayer to
     this->cState.sleeping = false;
     this->cState.changePending = true;
 	this->cState.idleMillis = 0;
+	this->cState.firstEot = true;
     Serial1.begin(9600);
     #ifdef LOGGING 
         delay(3000);
@@ -44,12 +45,12 @@ void DFPlay::begin(void) {    //  initialize class members and query DFPlayer to
     #endif
 	return;
 }
-void DFPlay::play(Selection& sel) { // Play a new selection
+void DFPlay::play(Selection& sel) {
     this->dState.selection = sel;
     this->dState.newSelection = true;
     this->dState.playState = PLAYING;
     this->dState.softStop = false;
-    this->dState.nextTrack = false;
+    this->dState.skip = false;
 	this->cState.tracks = 0;
 	this->cState.changePending = true;
     return;
@@ -84,50 +85,51 @@ void DFPlay::softStop(void)	{
     }
     return;
 }
-void DFPlay::next(void) {
-    this->dState.playState = PLAYING;
-    this->dState.nextTrack = true;
-    this->cState.changePending = true;
+void DFPlay::skip(void) {
+    if (this->cState.playState == PLAYING) {
+        this->dState.skip = true;
+        this->cState.changePending = true;
+    }
     return;
 }
 uint8_t DFPlay::setVolume(uint8_t vol)  { 
     this->dState.volume = max(min(vol, 30), 0);   
-    if (this->isPlaying()) cState.changePending = true;
+    if (this->isPlaying()) this->cState.changePending = true;
     return this->dState.volume;
 }
 uint8_t DFPlay::volumeUp(void)  {
     this->dState.volume = (min(this->dState.volume +1,30));
-    if (this->isPlaying()) cState.changePending = true;
+    if (this->isPlaying()) this->cState.changePending = true;
     return this->dState.volume;
 }
 uint8_t DFPlay::volumeDown(void)  {
     this->dState.volume = (max(this->dState.volume -1, 0));
-    if (this->isPlaying()) cState.changePending = true;
+    if (this->isPlaying()) this->cState.changePending = true;
     return this->dState.volume;
 }
 uint8_t DFPlay::setEqualizer(uint8_t eq) {
     this->dState.equalizer = eq;
-    if (this->isPlaying()) cState.changePending = true;
+    if (this->isPlaying()) this->cState.changePending = true;
     return this->dState.equalizer;
 }
 uint8_t DFPlay::equalizerUp(void) {
     this->dState.equalizer = (min(this->dState.equalizer +1,5));
-    if (this->isPlaying()) cState.changePending = true;
+    if (this->isPlaying()) this->cState.changePending = true;
     return this->dState.equalizer;
 }
 uint8_t DFPlay::equalizerDown(void) {
     this->dState.equalizer = (max(this->dState.equalizer -1,0));
-    if (this->isPlaying()) cState.changePending = true;
+    if (this->isPlaying()) this->cState.changePending = true;
     return this->dState.equalizer;
 }
 void DFPlay::muteOn(void) {
     this->dState.muted = true;
-    if (this->isPlaying()) cState.changePending = true;
+    if (this->isPlaying()) this->cState.changePending = true;
     return;
 }
 void DFPlay::muteOff(void) {
     this->dState.muted = false;
-    if (this->isPlaying()) cState.changePending = true;
+    if (this->isPlaying()) this->cState.changePending = true;
     return;
 }
 void DFPlay::repeatOn (void)            { this->dState.repeat = true; return; }
@@ -375,13 +377,13 @@ void DFPlay::manageDevice(void) {
     // Trigger actions affecting current play or in preparation to play a new selection -----------------------------------------------
 
     // RULE B1 - Skip to next track
-    if ((this->dState.nextTrack)) {
+    if ((this->dState.skip) && (this->cState.playState == PLAYING)) {
 		#ifdef LOGGING
-			Serial.println("Play Next");
+			Serial.println("Skip");
 		#endif
-    	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x01, 0x00, 0x00, 0x00, 0xFE, 0xFA, 0xEF };
-    	submitRequest(request,SUBMIT_INTERVAL);
-		if ((this->cState.playState == PLAYING) && ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA))) {
+		if ( ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA))) {
+        	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x01, 0x00, 0x00, 0x00, 0xFE, 0xFA, 0xEF };
+        	submitRequest(request,SUBMIT_INTERVAL);
         	this->cState.trackCount++;
         	this->cState.idleMillis = millis();
         	if ( !this->dState.newSelection) this->cState.changePending = false;
@@ -394,11 +396,11 @@ void DFPlay::manageDevice(void) {
  		            this->cState.noSubmitsTil = millis() + 100; // see note 3 at the bottom of this file for more detail
  		        }
         	}
-		} else {
-		    this->cState.playState = PLAYING;
-        	this->cState.playType = STANDARD;
+		} else { // playing an individual track
+		    this->dState.playState = IDLE; // signal a hard stop
+        	this->cState.changePending = true;
 		}
-    	this->dState.nextTrack = false;
+    	this->dState.skip = false;
 		return;
     }
     

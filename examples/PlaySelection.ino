@@ -96,7 +96,7 @@ int dfCommand(String cmd) {
     if (cmd.equalsIgnoreCase("repeatOff"))      { dfPlay.repeatOff(); return 0; }
     if (cmd.equalsIgnoreCase("stop"))           { dfPlay.stop();  return 0; }
     if (cmd.equalsIgnoreCase("softStop"))       { dfPlay.softStop(); return 0; }
-    if (cmd.equalsIgnoreCase("next"))           { dfPlay.next(); return 0; }
+    if (cmd.equalsIgnoreCase("skip"))           { dfPlay.skip(); return 0; }
     if (cmd.equalsIgnoreCase("play"))           { dfPlay.play(selection); return 0; }
     return -1;
 }
