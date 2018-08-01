@@ -26,7 +26,7 @@ If you do decide to use the DFPlayer without a library, you may still benefit fr
 DFPlay manages the DFPlayer based on ***state*** variables which are stored in memory. Some of these variables describe a "desired state" , and some describe the "current state" of the DFPlayer.
 
 
-DFPlay has one method (state-machine) ***manageDevice()*** that handles ALL of the communication with the DFPlayer. Each time manageDevice() is called, it asks two simple questions: 
+DFPlay has one method (state-machine) ***manageDevice()*** that handles ALL of the communication with the DFPlayer. Each time manageDevice() is called (in loop() or via a timer), it asks two simple questions: 
 1. Have I received any data from the DFPlayer?
 2. Do I need to send a command to the DFPlayer?
 
