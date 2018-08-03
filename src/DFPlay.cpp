@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DFPlay.cpp 
-    Version:    0.0.2  7/12/18
+    Version:    0.0.3 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 */    
@@ -122,24 +122,24 @@ uint8_t DFPlay::equalizerDown(void) {
     if (this->isPlaying()) this->cState.changePending = true;
     return this->dState.equalizer;
 }
-void DFPlay::muteOn(void) {
+void DFPlay::mute(void) {
     this->dState.muted = true;
     if (this->isPlaying()) this->cState.changePending = true;
     return;
 }
-void DFPlay::muteOff(void) {
+void DFPlay::unmute(void) {
     this->dState.muted = false;
     if (this->isPlaying()) this->cState.changePending = true;
     return;
 }
-void DFPlay::repeatOn (void)            { this->dState.repeat = true; return; }
-void DFPlay::repeatOff (void)           { this->dState.repeat = false; return; }
+void DFPlay::repeat (void)            	{ this->dState.repeat = true; return; }
+void DFPlay::norepeat(void)			{ this->dState.repeat = false; return; }
 bool DFPlay::isMuted(void)      		{ return this->dState.muted; }
 bool DFPlay::isIdle(void) 				{ if (this->dState.playState == IDLE) 		return true;    else return false; }
 bool DFPlay::isPlaying(void)			{ if (this->dState.playState == PLAYING)	return true;  	else return false; }
 bool DFPlay::isPaused(void) 			{ if (this->dState.playState == PAUSED) 	return true;    else return false; }
-bool DFPlay::isRepeating(void)          { if (this->dState.repeat) return true; else return false; }
-bool DFPlay::isSleeping(void)           { return this->cState.sleeping; }
+bool DFPlay::isRepeating(void)       { if (this->dState.repeat) return true; else return false; }
+bool DFPlay::isSleeping(void)         { return this->cState.sleeping; }
 
 
 // ----------------------------------------------------------------------------------------------------------------		
@@ -197,8 +197,22 @@ void DFPlay::manageDevice(void) {
                 
                 // FRAME 0x3B - unsolicited announcment of USB or SD media removal
                 else if (frame[CMD] == 0x3b) {
-                    if (frame[LSB] == USB) this->cState.usbAttached = false;
-                    else if (frame[LSB] == SD)  this->cState.sdAttached = false;
+                    if (frame[LSB] == USB) {
+						this->cState.usbAttached = false;
+						if ((isPlaying()) && (this->dState.selection.media == USB)) {
+							this->cState.playState = IDLE;
+							this->cState.idleMillis = millis();
+							this->dState.playState = IDLE;
+						}
+					}
+                    else if (frame[LSB] == SD)  {
+						this->cState.sdAttached = false;
+						if ((isPlaying()) && (this->dState.selection.media == SD)) {
+							this->cState.playState = IDLE;
+							this->cState.idleMillis = millis();
+							this->dState.playState = IDLE;
+						}
+					}
                 }
                 
                 // FRAME 0x3C & 0x3D - unsolicited "end of track" announcements
@@ -231,7 +245,6 @@ void DFPlay::manageDevice(void) {
         				    this->cState.playState = IDLE;
         					this->cState.idleMillis = millis();
                             this->dState.playState = IDLE;
-                            this->cState.changePending = true;
         				    #ifdef LOGGING
             				    Serial.println("Track Play Complete ...");
             			    #endif
@@ -265,7 +278,6 @@ void DFPlay::manageDevice(void) {
 						this->cState.playState = IDLE;
 						this->cState.idleMillis = millis();
 						this->dState.playState = IDLE;
-						this->cState.changePending = true;
 			            #ifdef LOGGING
 			                Serial.println("Track Play Failure ...");
 			            #endif
@@ -280,7 +292,7 @@ void DFPlay::manageDevice(void) {
     			        this->cState.playState = IDLE;
 						this->cState.idleMillis = millis();
                         this->dState.playState = IDLE;
-                        this->cState.changePending = true;
+                        this->cState.changePending = false;
     			    }
         		}
             } // FRAME PROCESSING COMPLETE
@@ -309,7 +321,7 @@ void DFPlay::manageDevice(void) {
     // RULE A1 - Exit when no changes are pending (This rule returns over 99.9% of the time. )
     if ( !this->cState.changePending) return;
     
-	// RULE A2 - Return to loopif it is too soon to submit another command to the DFPlayer
+	// RULE A2 - Return to loop if it is too soon to submit another command to the DFPlayer
     if (millis() < this->cState.noSubmitsTil) return;
     
     // RULE A3 - When DFPlayer is IDLE and IDLE is the desired state, check sleep mode and return to loop
@@ -328,26 +340,26 @@ void DFPlay::manageDevice(void) {
 	}
 	
     // RULE A4 - When the MPU boots, make sure DFPlayer is not sleeping and query the media status
-    if (this->cState.playState == INITIALIZE) {
-        if (this->cState.media == 0) {          // wake DFPlayer in case USB is attached
+    if (this->cState.playState == INITIALIZE) { // this state is set by begin()
+        if (this->cState.media == 0) {          // this will wake DFPlayer if USB media is attached
 		    uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x09, 0x00, 0x00, 0x01, 0xFE, 0xF1, 0xEF };
 		    submitRequest(request,SUBMIT_INTERVAL*3);
 		    this->cState.media++;
-        } else if (this->cState.media == 1) {   // wake DFPlayer in case SD is attached
+        } else if (this->cState.media == 1) {   // this will wake DFPlayer if SD media is attached
 		    uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x09, 0x00, 0x00, 0x02, 0xFE, 0xF0, 0xEF };
 		    submitRequest(request,SUBMIT_INTERVAL*3);
 		    this->cState.media++;
-        } else if (this->cState.media == 2) {  // query DFPlayer media and exit IINITIALIZE playState
+        } else if (this->cState.media == 2) {  // query DFPlayer media and reset playState
             uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x3F, 0x00, 0x00, 0x00, 0xFE, 0xBC, 0xEF };
 		    submitRequest(request,SUBMIT_INTERVAL);
 		    this->cState.playState = IDLE;
 			this->cState.idleMillis = millis();
 		    this->cState.media = 0;
         }
-        return;
+        return; // exit DFPlayer initialization procedure
     }
 
-    // RULE A5 - Awake from SLEEP mode so other commands will function
+    // RULE A5 - Make sure DFPlayer is awake and ready to accept commands
     if (this->cState.sleeping) {
         #ifdef LOGGING
 			Serial.println("Exit Sleep");
@@ -364,8 +376,6 @@ void DFPlay::manageDevice(void) {
 		this->cState.sleeping = false;
 		return;
     }
-
-
 	#ifdef LOGGING
 		if (this->dState.newSelection == true) {
 			Serial.printf("\nSelection: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
@@ -378,28 +388,26 @@ void DFPlay::manageDevice(void) {
 
     // RULE B1 - Skip to next track
     if ((this->dState.skip) && (this->cState.playState == PLAYING)) {
-		#ifdef LOGGING
-			Serial.println("Skip");
-		#endif
 		if ( ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA))) {
+    		#ifdef LOGGING
+    			Serial.println("Skip");
+    		#endif
         	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x01, 0x00, 0x00, 0x00, 0xFE, 0xFA, 0xEF };
         	submitRequest(request,SUBMIT_INTERVAL);
         	this->cState.trackCount++;
         	this->cState.idleMillis = millis();
-        	if ( !this->dState.newSelection) this->cState.changePending = false;
+			this->cState.changePending = false;
         	if (this->cState.trackCount >= this->cState.tracks) { // if last track was skipped
          		this->cState.trackCount = 0;
  		        if ( !this->dState.repeat) {
- 		            this->dState.playState = IDLE; // signal a hard stop
- 		            this->cState.changePending = true;
- 		            // DFPlayer requires extra time to process when stopping after the last track in a folder or on media
+ 		            this->dState.playState = IDLE; // no repeat, so signal a hard stop
+  		            // DFPlayer requires extra time to process when stopping after the last track in a folder or on media
  		            this->cState.noSubmitsTil = millis() + 100; // see note 3 at the bottom of this file for more detail
  		        }
         	}
 		} else { // playing an individual track
-		    this->dState.playState = IDLE; // signal a hard stop
-        	this->cState.changePending = true;
-		}
+		    this->dState.playState = IDLE; // signal a hard stop (If a playlist is used, going IDLE will trigger the next play command)
+ 		}
     	this->dState.skip = false;
 		return;
     }
@@ -413,7 +421,7 @@ void DFPlay::manageDevice(void) {
 		submitRequest(request,SUBMIT_INTERVAL);
 		this->cState.playState = IDLE;
 		this->cState.idleMillis = millis();
-		if( !this->dState.newSelection) this->cState.changePending = false;
+		this->cState.changePending = false;
 		return;
     }
 
@@ -425,12 +433,12 @@ void DFPlay::manageDevice(void) {
         uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x0E, 0x00, 0x00, 0x00, 0xFE, 0xED, 0xEF };
         submitRequest(request, SUBMIT_INTERVAL);
         this->cState.playState = PAUSED;
-		if( !this->dState.newSelection) this->cState.changePending = false;
-        return;
+		this->cState.changePending = false;
+ return;
     }
 
     // RULE B4 - Assure DFPlayer volume is set to the desired volume
-	uint8_t desiredVolume = 0;
+	uint8_t desiredVolume = 0; // this setting will prevail when muted
     if ( !this->dState.muted) {
         desiredVolume = max(min((this->dState.volume + this->dState.selection.volAdj), 30), 0);
 	}
@@ -470,7 +478,7 @@ void DFPlay::manageDevice(void) {
         uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x0D, 0x00, 0x00, 0x00, 0xFE, 0xEE, 0xEF };
         submitRequest(request,SUBMIT_INTERVAL);
         this->cState.playState = PLAYING;
-		if( !this->dState.newSelection) this->cState.changePending = false;
+		this->cState.changePending = false;
         return;
     }
 // ASSESS STATE VARIABLES AND START PLAYING A NEW SELECTION
@@ -483,6 +491,7 @@ void DFPlay::manageDevice(void) {
 	||  ((this->dState.selection.media == SD) && (this->cState.sdAttached))) { // media ok
 	} else {
 		this->dState.playState = IDLE;
+		this->dState.newSelection = false;
 		this->cState.changePending = false;
 		#ifdef LOGGING
 			Serial.println("Invalid Media");
@@ -501,9 +510,10 @@ void DFPlay::manageDevice(void) {
 		this->cState.media = this->dState.selection.media;
 		return;
     }
+	
     // RULE C4 - Play all tracks on the media
 	if (this->dState.selection.folder == 0) {
-		if (this->cState.tracks == 0) {
+		if (this->cState.tracks == 0) { // Issue the DFPlayer command to query the number of files in the folder
 			#ifdef LOGGING
 			    Serial.println("Query Track Count");
 		    #endif
@@ -516,6 +526,7 @@ void DFPlay::manageDevice(void) {
 			}
 			return;   
 		}
+		// Issue the DFPlayer command to play a folder
 		#ifdef LOGGING
 			Serial.printf("Play Media: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
 			this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
@@ -531,9 +542,9 @@ void DFPlay::manageDevice(void) {
 		return;
 	}   
 
-	// RULE C5 - Play all tracks in a folder
+	// RULE C5 - Play all tracks on the media
 	if (this->dState.selection.track == 0) {
-		if (this->cState.tracks == 0) { // query the number of files in the folder
+		if (this->cState.tracks == 0) { // Issue the DFPlayer command to query the number of files on the media
 			#ifdef LOGGING
 			    Serial.println("Query Track Count");
 		    #endif
@@ -542,6 +553,7 @@ void DFPlay::manageDevice(void) {
 			submitRequest(request,(int)SUBMIT_INTERVAL *5);
 			return;
 		}
+		// Issue the DFPlayer command to play the media
 		#ifdef LOGGING
 			Serial.printf("Play Folder: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
 			this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
@@ -568,7 +580,7 @@ void DFPlay::manageDevice(void) {
 		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x14, 0x00, (uint8_t)(dbyte / 256), (uint8_t)(dbyte % 256), (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
 		submitRequest(request,SUBMIT_INTERVAL);
 		this->cState.playState = PLAYING;
-		this->cState.playType = HUGE;
+		this->cState.playType = TRACK;
 		this->dState.newSelection = false;
 		this->cState.changePending = false;
 		this->cState.firstEot = true;
@@ -585,14 +597,14 @@ void DFPlay::manageDevice(void) {
     	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x0F, 0x00, this->dState.selection.folder, (uint8_t)this->dState.selection.track, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
     	submitRequest(request,SUBMIT_INTERVAL);
     	this->cState.playState = PLAYING;
-    	this->cState.playType = STANDARD;
+    	this->cState.playType = TRACK;
     	this->dState.newSelection = false;
     	this->cState.changePending = false;
     	this->cState.firstEot = true;
     	return;
     }
     
-	// RULE C8 - Play a track from the MP3 folder
+	// RULE C8 - Play a track from the MP3 folder ... Track must have a 4-digit file name prefix
     if (this->dState.selection.folder == 100) {
 		#ifdef LOGGING
 			Serial.printf("Play MP3: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
@@ -603,18 +615,18 @@ void DFPlay::manageDevice(void) {
 		    (uint8_t)(this->dState.selection.track % 256), (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
 		submitRequest(request,SUBMIT_INTERVAL);
 		this->cState.playState = PLAYING;
-		this->cState.playType = MP3;
+		this->cState.playType = TRACK;
 		this->dState.newSelection = false;
 		this->cState.changePending = false;
 		this->cState.firstEot = true;
 		return;
     }
     return;
-}
+} // end of manageDevice()
     
 /* ================================================================================================ submitRequest()
-                                    Write Request Frames to Serial 1
-   ================================================================================================================
+		Write Request Frames to Serial 1
+   =============================================================================================================
 */
 void DFPlay::submitRequest(uint8_t request[] ,uint8_t dlay) {
     uint8_t requestLength = request[LEN] + 4;
@@ -640,8 +652,7 @@ void DFPlay::submitRequest(uint8_t request[] ,uint8_t dlay) {
         command is issued.
 	    TIMING ADJUSTMENTS MAY BE REQUIRED IN SCENDARIOS WHERE VERY LARGE TRACK COUNTS ARE USED. 
 	4.  When playing single tracks, DFPlayer returns duplicate end-of-track frames. You will see this if LOGGING is
-	    enabled. This library does not filter out the duplicates since that would take more resources than just
-	    processing them. 
+	    enabled. This library ignores the first eot frame and acts on the second. 
 */    
     
     

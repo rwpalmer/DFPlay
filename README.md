@@ -7,7 +7,7 @@
 ## *Overview*
 DFPlayers are inexpensive and they have a serial interface. This makes them ideal for use in IOT projects.
 
-While it is true that the DFPlayer can be used without a library, it is also true that a library can make the DFPlayer much easier to use. This library's methods mirror the buttons that you would find on a portable MP3 player.  Methods like"play()", "stop()", "pause()", and "resume()",  control the DFPlayer and mask the complexity of the DFPlayer's native command set.  DFPlay also provides enhanced functionality. For example: 
+While it is true that the DFPlayer can be used without a library, it is also true that a library can make the DFPlayer much easier to use. This library's methods mirror the buttons that you would find on a portable MP3 player.  Methods like"play()", "stop()", "pause()", "resume()", and "mute()"  control the DFPlayer and mask the complexity of the DFPlayer's native command set.  DFPlay also provides enhanced functionality. For example: 
 * DFPlay plays all content with one ***play(*** Selection ***)*** command, where "Selection":
 	*  defines the content to be played
 	* allows the volume setting to be adjusted for the duration of content play.  This addresses a common audio playback problem, where some content plays louder than other content. It also makes it simple to play some content (say an alarm) louder than other content.
