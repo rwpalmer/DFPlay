@@ -1,8 +1,14 @@
-/* Module: DoorAlarm.ino
- *  With this example, you can toggle a door sensor by typing "open" or "closed" into the Particle Function via the Particle Console.
- *  DFPlay will play one track when the door opens ... and every 5 minutes while the door remains open.
- *  DFPlay will play a second track when the door closes.
- *  All toggles go through debounce logic, as if mechanical switches were being used. 
+/*
+    Project:    DFPlay library
+    File:       DoorAlarm.ino
+    Version:    0.0.4 - August 2018
+    Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
+    License:    GNU GPLv3   
+
+	With this example, you can toggle a door sensor by typing "open" or "closed" into the Particle Function via the Particle Console.
+	DFPlay will play one track when the door opens ... and every 5 minutes while the door remains open.
+	DFPlay will play a second track when the door closes.
+	All toggles go through debounce logic, as if mechanical switches were being used. 
  */
  
 #include <Particle.h>
@@ -15,10 +21,10 @@ uint32_t doorStateMillis = 0;
 time_t doorStateTime = 0;
 
 // SELECTION SETTINGS - For sound to play, these SETTINGS must match your media.                 <------------------- PLEASE NOTE
-Selection doorOpen   = {2,16,1,0,0};    // <-- media 2 (SD), folder 16, track 1, default volume, default equalizer
-Selection doorClosed = {2,16,2,0,0};    // <-- media 2 (SD), folder 16, track 2, default volume, default equalizer
+Selection doorOpen   = {2,16,1,0,0};    // <-- translates to --> media 2 (SD), folder 16, track 1, default volume, default equalizer
+Selection doorClosed = {2,16,2,0,0};    // <-- translates to --> media 2 (SD), folder 16, track 2, default volume, default equalizer
 DFPlay dfPlay;
-Timer timer(300000, renotify); // renotify every five minutes
+Timer timer(300000, renotify); // call renotify function every five minutes  (5 minutes * 60 seconds * 1000 = 300000)
 
 
 void setup() {
@@ -29,21 +35,27 @@ void setup() {
 }
 
 void loop() {
-    // CHECK DOOR SENSOR, DEBOUNCE, AND PROCESS DOOR STATE CHANGES
-    if (doorSensor == doorState) { // reset debounce cycle when sensor matches doorState
+ 
+ // CHECK DOOR SENSOR, DEBOUNCE, AND PROCESS DOOR STATE CHANGES
+    if (doorSensor == doorState) { // reset debounce cycle any time the sensor matches doorState
         doorStateMillis = 0;
-    } else if (doorStateMillis == 0) { // start debounce cycle when a state change is first detected
+    } else if (doorStateMillis == 0) { // start debounce cycle any time a new state change is detected
         doorStateMillis = millis();
-    } else if (millis() > (doorStateMillis + DEBOUNCE_MILLIS)) { // take action when debounce cycle expires
-        // the door sensor has provided a constant reading for DEBOUNCE_MILLIS, so we accept the reading as a valid state change 
-        doorState = doorSensor;
+    } else if (millis() > (doorStateMillis + DEBOUNCE_MILLIS)) { // act when a new steady state has been achieved
         doorStateMillis = 0;
+        doorState = doorSensor;
         switch (doorState) {
-        case OPEN:      dfPlay.play(doorOpen);   timer.start();   break;
-        case CLOSED:    dfPlay.play(doorClosed);  timer.stop();   break;
+        case OPEN:      	dfPlay.play(doorOpen);   					// <-- DOOROPEN SOUND PLAYED
+							timer.start(); 
+							break;        
+ 
+		case CLOSED:    	dfPlay.play(doorClosed);  					// <-- DOORCLOSED SOUND PLAYED
+							timer.stop();   
+							break;        
         }
-    }
-    // HANDLE ALL COMMUNICATIONS WITH THE DFPLAYER
+    }  // exit Door Sensor logic
+	
+    // handle all communications with the DFPlayer
     dfPlay.manageDevice();
 }
 
@@ -57,7 +69,7 @@ int DoorSensor(String s) {
 
 // TIMER FUNCTION
 void renotify(void) {
-     dfPlay.play(doorOpen);
+     dfPlay.play(doorOpen);                                                     // <-- DOOROPEN SOUND REPLAYED BY TIMER
      return;
 }
 

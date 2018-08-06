@@ -1,4 +1,10 @@
-#ifndef __DFPLAY_H_
+/*
+    Project:    DFPlay library
+    File:       DFPlay.h
+    Version:    0.0.4 - August 2018
+    Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
+    License:    GNU GPLv3   
+*/    #ifndef __DFPLAY_H_
 #define __DFPLAY_H_
 #include <Particle.h>
 
@@ -55,15 +61,15 @@ class CurrentState {
         uint8_t		volume;         	// the current volume state (0 to 30)
         uint8_t		media;          	// identifies the currently selected media (USB, SD, SLEEP)  
         uint8_t		playType; 			// the current play type (TBD, MEDIA, FOLDER, or TRACK)      
-        bool			usbAttached;		// true indicates that a USB key is attached to the DFPlayer
-        bool			sdAttached;		// true indicates that an SD card is attached to the DFPlayer
-        bool        	sleeping;       	// true indicates that the DFPlayer is in low-power mode
-        bool        	changePending;	// true tells manageDevice() that a state change is pending
-        bool        	firstEot;       		// true identifies first End-Of-Track frame 
-		uint32_t		noSubmitsTil;		// the time when the DFPlayer will be ready to accept the next command
-		uint32_t    	tracks;         		// the number of tracks in a folder or media selection
-        uint32_t		trackCount;     	// the number of tracks that have been played in a folder or media selection
-        uint32_t    	idleMillis;     		// millis when cState.playState was set to IDLE
+        bool	    usbAttached;	    // true indicates that a USB key is attached to the DFPlayer
+        bool		sdAttached;		    // true indicates that an SD card is attached to the DFPlayer
+        bool        sleeping;       	// true indicates that the DFPlayer is in low-power mode
+        bool        changePending;	    // true tells manageDevice() that a state change is pending
+        bool        firstEot;       	// true identifies first End-Of-Track frame 
+		uint32_t	noSubmitsTil;		// the time when the DFPlayer will be ready to accept the next command
+        uint32_t	trackCount;     	// the number of tracks that have been played in a folder or media selection
+        uint32_t    idleMillis;     	// millis when cState.playState was set to IDLE
+		int    	    tracks;         	// the number of tracks in a folder or media selection
 };		
 
 class DFPlay {
@@ -83,7 +89,7 @@ class DFPlay {
         uint8_t fx = 0;                                                         // Response frame byte index
 
 // PRIVATE METHODS
-        void submitRequest(uint8_t[] ,uint8_t);
+        void submitRequest(uint8_t[] ,uint16_t);
         
 // PUBLIC METHODS        
     public:

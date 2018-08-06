@@ -1,10 +1,7 @@
-#include "DFPlay.h"
-#include <vector>
-
 /*
     Project:    DFPlay library
     File:       PlayList.ino 
-    Version:    0.0.1  7/28/18
+    Version:    0.0.4  August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3
     
@@ -51,6 +48,9 @@
 			To select individual tracks within folders "16" to "99", file names must start with a 3-digit file name 
 			prefix in the range of "001" to "255". A name like "002 Beans In My Ears.wav" is valid. 
 */
+
+#include "DFPlay.h"
+#include <vector>
 
 
     DFPlay dfPlay;

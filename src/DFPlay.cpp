@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DFPlay.cpp 
-    Version:    0.0.3 - August 2018
+    Version:    0.0.4 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 */    
@@ -190,28 +190,34 @@ void DFPlay::manageDevice(void) {
                 // POST DATA FRAME INFORMATION TO STATE VARIABLES
                 
                 // FRAME 0x3A - unsolicited announcement of USB or SD media attachment
+                //            - this frame wakes the player and makes attached media the selected media
+                //            - If other media is playing, play will stop, so we set the states accordingly
                 if (frame[CMD] == 0x3a) {
-                    if (frame[LSB] == USB) this->cState.usbAttached = true;
-                    else if (frame[LSB] == SD)  this->cState.sdAttached = true;
+                    this->cState.sleeping = false;
+					this->cState.playState = IDLE;
+					this->cState.idleMillis = millis();
+					this->dState.playState = IDLE;
+     			    this->cState.changePending = true;
+                    if (frame[LSB] == USB) {
+                        this->cState.usbAttached = true;
+                        this->cState.media = USB;
+                   }
+                    else if (frame[LSB] == SD) {
+                        this->cState.sdAttached = true;
+                        this->cState.media = SD;
+                    }
                 }
                 
                 // FRAME 0x3B - unsolicited announcment of USB or SD media removal
                 else if (frame[CMD] == 0x3b) {
-                    if (frame[LSB] == USB) {
-						this->cState.usbAttached = false;
-						if ((isPlaying()) && (this->dState.selection.media == USB)) {
-							this->cState.playState = IDLE;
-							this->cState.idleMillis = millis();
-							this->dState.playState = IDLE;
-						}
-					}
-                    else if (frame[LSB] == SD)  {
-						this->cState.sdAttached = false;
-						if ((isPlaying()) && (this->dState.selection.media == SD)) {
-							this->cState.playState = IDLE;
-							this->cState.idleMillis = millis();
-							this->dState.playState = IDLE;
-						}
+                    if (frame[LSB] == USB) 	this->cState.usbAttached = false;
+                    else if (frame[LSB] == SD)  this->cState.sdAttached = false;
+
+					if ((isPlaying()) && (this->dState.selection.media == frame[LSB])) {
+						this->cState.playState = IDLE;
+						this->cState.idleMillis = millis();
+						this->dState.playState = IDLE;
+     			        this->cState.changePending = true;
 					}
                 }
                 
@@ -242,9 +248,8 @@ void DFPlay::manageDevice(void) {
         				    this->dState.newSelection = true;
         				    this->cState.changePending = true;
         				} else {
-        				    this->cState.playState = IDLE;
-        					this->cState.idleMillis = millis();
                             this->dState.playState = IDLE;
+        				    this->cState.changePending = true;
         				    #ifdef LOGGING
             				    Serial.println("Track Play Complete ...");
             			    #endif
@@ -278,8 +283,9 @@ void DFPlay::manageDevice(void) {
 						this->cState.playState = IDLE;
 						this->cState.idleMillis = millis();
 						this->dState.playState = IDLE;
+                        this->cState.changePending = true;
 			            #ifdef LOGGING
-			                Serial.println("Track Play Failure ...");
+			                Serial.println("Play Failure ...");
 			            #endif
                      }
         		}
@@ -292,7 +298,10 @@ void DFPlay::manageDevice(void) {
     			        this->cState.playState = IDLE;
 						this->cState.idleMillis = millis();
                         this->dState.playState = IDLE;
-                        this->cState.changePending = false;
+                        this->cState.changePending = true;
+			            #ifdef LOGGING
+			                Serial.println("No Tracks to Play ...");
+			            #endif
     			    }
         		}
             } // FRAME PROCESSING COMPLETE
@@ -421,7 +430,7 @@ void DFPlay::manageDevice(void) {
 		submitRequest(request,SUBMIT_INTERVAL);
 		this->cState.playState = IDLE;
 		this->cState.idleMillis = millis();
-		this->cState.changePending = false;
+		this->cState.changePending = true;
 		return;
     }
 
@@ -513,7 +522,7 @@ void DFPlay::manageDevice(void) {
 	
     // RULE C4 - Play all tracks on the media
 	if (this->dState.selection.folder == 0) {
-		if (this->cState.tracks == 0) { // Issue the DFPlayer command to query the number of files in the folder
+		if (this->cState.tracks == 0) { // Issue the DFPlayer command to query the number of files on the media
 			#ifdef LOGGING
 			    Serial.println("Query Track Count");
 		    #endif
@@ -524,49 +533,75 @@ void DFPlay::manageDevice(void) {
 				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x48, 0x00, 0x00, 0x00, 0xFE, 0xB3, 0xEF};
 				submitRequest(request,SUBMIT_INTERVAL);
 			}
+			cState.tracks--;
 			return;   
-		}
-		// Issue the DFPlayer command to play a folder
-		#ifdef LOGGING
-			Serial.printf("Play Media: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
-			this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
-			this->dState.selection.volAdj, this->dState.selection.equalizer, this->cState.tracks);
-		#endif
-		uint16_t cs = 0xFEFB - (0x11 + this->dState.selection.media); // compute checksum
-		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x11, 0x00, 0x00,  this->dState.selection.media, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
-		submitRequest(request,SUBMIT_INTERVAL);
-		this->cState.playState = PLAYING;
-		this->cState.playType = MEDIA;
-		this->dState.newSelection = false;
-		this->cState.changePending = false;
-		return;
+		} else if (cState.tracks > 0) {
+		// Issue the DFPlayer command to play the media
+    		#ifdef LOGGING
+    			Serial.printf("Play Media: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
+    			this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
+    			this->dState.selection.volAdj, this->dState.selection.equalizer, this->cState.tracks);
+    		#endif
+    		uint16_t cs = 0xFEFB - (0x11 + this->dState.selection.media); // compute checksum
+    		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x11, 0x00, 0x00,  this->dState.selection.media, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
+    		submitRequest(request,SUBMIT_INTERVAL);
+    		this->cState.playState = PLAYING;
+    		this->cState.playType = MEDIA;
+    		this->dState.newSelection = false;
+    		this->cState.changePending = false;
+    		return;
+		} else if (cState.tracks == -8) { // timeout after 40 SUBMIT_INTERVALS
+		    this->dState.playState = IDLE;
+		    this->cState.idleMillis = millis();
+		    this->cState.playState = IDLE;
+		    this->cState.changePending = true;
+		    return;
+		} else { 
+		    this->cState.tracks--;
+		    this->cState.noSubmitsTil = (millis() + (5* (int)SUBMIT_INTERVAL));
+		    Serial.println("waiting for Query ...");
+		    return;
+	    }
 	}   
 
-	// RULE C5 - Play all tracks on the media
+	// RULE C5 - Play all tracks on in a folder
 	if (this->dState.selection.track == 0) {
-		if (this->cState.tracks == 0) { // Issue the DFPlayer command to query the number of files on the media
+		if (this->cState.tracks == 0) { // Issue the DFPlayer command to query the number of files in a folder
 			#ifdef LOGGING
 			    Serial.println("Query Track Count");
 		    #endif
 			uint16_t cs = 0xFEFB - (0x4E + this->dState.selection.folder); // compute checksum
 			uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x4E, 0x00, 0x00,  this->dState.selection.folder, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
-			submitRequest(request,(int)SUBMIT_INTERVAL *5);
+			submitRequest(request,( 5* (int)SUBMIT_INTERVAL));
+			cState.tracks--;
 			return;
-		}
-		// Issue the DFPlayer command to play the media
-		#ifdef LOGGING
-			Serial.printf("Play Folder: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
-			this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
-			this->dState.selection.volAdj, this->dState.selection.equalizer, this->cState.tracks);
-		#endif
-		uint16_t cs = 0xFEFB - (0x17 + this->dState.selection.folder); // compute checksum
-		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x17, 0x00, 0x00,  this->dState.selection.folder, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
-		submitRequest(request,SUBMIT_INTERVAL);
-		this->cState.playState = PLAYING;
-		this->cState.playType = FOLDER;
-		this->dState.newSelection = false;
-		this->cState.changePending = false;
-		return;
+		} else if (cState.tracks > 0) {
+        	// Issue the DFPlayer command to play the folder
+        	#ifdef LOGGING
+        		Serial.printf("Play Folder: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
+        		this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
+        		this->dState.selection.volAdj, this->dState.selection.equalizer, this->cState.tracks);
+        	#endif
+        	uint16_t cs = 0xFEFB - (0x17 + this->dState.selection.folder); // compute checksum
+        	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x17, 0x00, 0x00,  this->dState.selection.folder, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
+        	submitRequest(request,SUBMIT_INTERVAL);
+        	this->cState.playState = PLAYING;
+        	this->cState.playType = FOLDER;
+        	this->dState.newSelection = false;
+        	this->cState.changePending = false;
+        	return;
+		} else if (cState.tracks == -8) { // timeout after 40 SUBMIT_INTERVALS
+		    this->dState.playState = IDLE;
+		    this->cState.idleMillis = millis();
+		    this->cState.playState = IDLE;
+		    this->cState.changePending = true;
+		    return;
+		} else { 
+		    this->cState.tracks--;
+		    this->cState.noSubmitsTil = (millis() + (5* (int)SUBMIT_INTERVAL));
+		    Serial.println("waiting for Query ...");
+		    return;
+	    }
 	}
 
 	// RULE C6 - Play an individual track track from folders 01 to 15 ... Track must have a 4-digit file name prefix
@@ -628,7 +663,7 @@ void DFPlay::manageDevice(void) {
 		Write Request Frames to Serial 1
    =============================================================================================================
 */
-void DFPlay::submitRequest(uint8_t request[] ,uint8_t dlay) {
+void DFPlay::submitRequest(uint8_t request[] ,uint16_t dlay) {
     uint8_t requestLength = request[LEN] + 4;
     #ifdef LOGGING
         Serial.print(" Request:");
