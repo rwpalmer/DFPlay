@@ -1,6 +1,7 @@
 
 
 
+
 # ***DFPlay***
  ***An Enhanced Library for the DFPlayer***
 
@@ -22,11 +23,20 @@ While it is true that the DFPlayer can be used without a library, it is also tru
 If you do decide to use the DFPlayer without a library, you may still benefit from the information displayed when you execute the playSelection.ino example with logging turned on. See the DFPlay QuickStart Guide for details. 
 
 ## *Architecture*
+<<<<<<< HEAD
+<<<<<<< HEAD
+As you can see in the following drawing, DFPlay has one method named **manageDevice()** that handles ALL communication with the DFPlayer device. Every other DFPlay method simply updates and/or returns "state variables" that reside in memory. These methods complete their assigned tasks almost instantly. 
+![alt text](https://github.com/rwpalmer/DFPlay/blob/master/images/DFPlayArchitecture.png)
+=======
+=======
+>>>>>>> c368a0790537561dbb2e9c7958a2bbba12e4cf13
+![alt text](https://github.com/rwpalmer/DFPlay/blob/master/images/DFPlayArchitecture.png)
 ##### DFPlay provides high-performance device control, but consumes minimal resources.
 DFPlay manages the DFPlayer based on ***state*** variables which are stored in memory. Some of these variables describe a "desired state" , and some describe the "current state" of the DFPlayer.
+>>>>>>> c368a0790537561dbb2e9c7958a2bbba12e4cf13
 
 
-DFPlay has one method (state-machine) ***manageDevice()*** that handles ALL of the communication with the DFPlayer. Each time manageDevice() is called (in loop() or via a timer), it asks two simple questions: 
+Each time manageDevice() is called, it asks two simple questions: 
 1. Have I received any data from the DFPlayer?
 2. Do I need to send a command to the DFPlayer?
 
@@ -39,7 +49,7 @@ When the answer to the second question is yes, manageDevice() will perform the f
  1. exit immediately if it is too soon to send another command to the DFPlayer.
  2. evaluate state variables based on a set of rules which compare current and desired states to search for non-compliance.
  3. send a command to the DFPlayer to correct the first non-compliance found.
- 4. exit immediately after the first command is sent. 
+ 4. exit immediately after the command is sent. 
  
 If another non-compliance issues exists, each  will be corrected in a subsequent manageDevice() execution cycle. 
 
