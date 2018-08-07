@@ -25,9 +25,12 @@ If you do decide to use the DFPlayer without a library, you may still benefit fr
 ## *Architecture*
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 As you can see in the following drawing, DFPlay has one method named **manageDevice()** that handles ALL communication with the DFPlayer device. Every other DFPlay method simply updates and/or returns "state variables" that reside in memory. These methods complete their assigned tasks almost instantly. 
 ![alt text](https://github.com/rwpalmer/DFPlay/blob/master/images/DFPlayArchitecture.png)
 =======
+=======
+>>>>>>> c368a0790537561dbb2e9c7958a2bbba12e4cf13
 =======
 >>>>>>> c368a0790537561dbb2e9c7958a2bbba12e4cf13
 ![alt text](https://github.com/rwpalmer/DFPlay/blob/master/images/DFPlayArchitecture.png)
