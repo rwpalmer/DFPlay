@@ -23,14 +23,8 @@ While it is true that the DFPlayer can be used without a library, it is also tru
 If you do decide to use the DFPlayer without a library, you may still benefit from the information displayed when you execute the playSelection.ino example with logging turned on. See the DFPlay QuickStart Guide for details. 
 
 ## *Architecture*
-<<<<<<< HEAD
 As you can see in the following drawing, DFPlay has one method named **manageDevice()** that handles ALL communication with the DFPlayer device. Every other DFPlay method simply updates and/or returns "state variables" that reside in memory. These methods complete their assigned tasks almost instantly. 
 ![alt text](https://github.com/rwpalmer/DFPlay/blob/master/images/DFPlayArchitecture.png)
-=======
-![alt text](https://github.com/rwpalmer/DFPlay/blob/master/images/DFPlayArchitecture.png)
-##### DFPlay provides high-performance device control, but consumes minimal resources.
-DFPlay manages the DFPlayer based on ***state*** variables which are stored in memory. Some of these variables describe a "desired state" , and some describe the "current state" of the DFPlayer.
->>>>>>> c368a0790537561dbb2e9c7958a2bbba12e4cf13
 
 
 Each time manageDevice() is called, it asks two simple questions: 
