@@ -23,7 +23,7 @@ While it is true that the DFPlayer can be used without a library, it is also tru
 If you do decide to use the DFPlayer without a library, you may still benefit from the information displayed when you execute the playSelection.ino example with logging turned on. See the DFPlay QuickStart Guide for details. 
 
 ## *Architecture*
-As you can see in the following drawing, DFPlay has one method named **manageDevice()** that handles ALL communication with the DFPlayer device. Every other DFPlay method simply updates and/or returns "state variables" that reside in memory. These methods complete their assigned tasks almost instantly. 
+As you can see in the following drawing, DFPlay has one method named **manageDevice()** that handles ALL communication with the DFPlayer device. Every other DFPlay method simply updates and/or returns "state variables" that reside in memory. These methods complete their assigned tasks and return instantly. 
 ![alt text](https://github.com/rwpalmer/DFPlay/blob/master/images/DFPlayArchitecture.png)
 
 
@@ -31,9 +31,9 @@ Each time manageDevice() is called, it asks two simple questions:
 1. Have I received any data from the DFPlayer?
 2. Do I need to send a command to the DFPlayer?
 
-Over 99.9% of the time, both answers are no, and manageDevice() simply exits. 
+The vast majority of the time (over 99.9% in testing), both answers are no, and manageDevice() simply exits. 
 
-When the answer to the first question is yes, manageDevice() updates state variables based on the data it received.
+When the answer to the first question is yes, manageDevice() updates state variables based on the data it received from the DFPlayer. 
 
 When the answer to the second question is yes, manageDevice() will perform the following tasks:
 
@@ -46,36 +46,33 @@ If another non-compliance issues exists, each  will be corrected in a subsequent
 
 DFPlayer needs time to process each command it receives. Most commands complete within 30ms, but some take longer. When manageDevice() sends a command, it calculates when it will be safe to send the next command. That calculation is the basis for step 1 exiting in the above task list. 
 
-All other DFPlay methods simply update state variables in memory, or return data based on state variables. All return instantly. 
+DFPlay's design allows it to manage the DFPlayer with minimal impact to the host application, and gives developers the option of letting manageDevice() run in loop() or triggering it with a timer that can be started and stopped based on the applications need for the DFPlayer.  
 
 ## *Usage Information*
 The DFPlay QuickStart Guide provides more detailed information about DFPlay commands, and the Selection object that is used to identify the content to be played on the DFPlayer:     [******DFPlay QuickStart*** Guide***](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub)
  
- There are four sample programs in the GitHub "examples" folder. 
-#### PlaySD.ino
-Plays all of the tracks on SD media without any programming. Simply compile the example, insert the SD media into the DFPlayer, and it will begin to play. If you don't have an SD ready, you can just rip a CD/DVD to the media and insert it into the DFPlayer. You do not need to reorganize the content, rename folders or files.
+The DFPlay library is published with five sample applications.  All require a 
+DFPlayer (like the FN-M16P / DFPlayer-Mini) wired to a Particle device and a speaker or earphones. Details are provided
 
-This is a great program for initial testing of the DFPlayer ... to make sure your wiring is correct.
-
-#### PlaySD-timer.ino
-A second version of  PlaySD.ino where the manageDevice() method is run via a timer, and not in loop().
-
-##### For the remaining examples, folders and tracks need to be named based on DFPlayer requirements. For details, refer to the "*How DFPlay plays tracks, and Media Requirements*" topic within the DFPlay QuickStart Guide. 
+#### PlaySD.ino and PlaySD-timer.ino
+Insert SD media that contains .mp3 or .wav files into the DFPlayer, flash the Particle device, and  listen to the music ( or whatever) ... 
+[documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/PlaySD.md)
 
 #### PlaySelection.ino
-Plays individual selections, where each selection can play individual tracks, folders, or everything on the media. Again, no programming is involved. Selections are entered via a Particle Function and the Particle Console.  
-
-A second Particle Function that allows you to invoke DFPlay methods by entering commands like "play", "stop", "pause", "resume", etc. All of the commands are documented in comments within the .ino file. 
+Use the DFPlay library to control your DFPlayer ... without any coding. This example allows you to select media content and execute DFPlay methods via two Particle functions. 
+[documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/PlaySelection.md)
 
 #### PlayList.ino
-Allows you to create and play a "playlist" ... which is an array (or vector) of selections. Once again .,. no programming is required. You simply enter the selections via a Particle Function and the Particle Console. Activity is logged to the Serial Console. 
+Create a "playlist" and listen to your DFPlayer play it ... without any coding.  This example allows you to select media content and add it to a playlist. The playlist automatically starts playing when the first selection is added. Add as many selections as you like. 
+[documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/PlayList.md)
 
 #### DoorAlarm.ino
-Plays one track when the door closes, and another track when the door opens ... and every five minutes while the door is open. Door status is toggled via a Particle Function and the Particle Console. 
+Monitor a virtual door. This example Plays one track when the door closes, and another track when the door opens, and every five minutes while the door remains open. Door status is toggled via a Particle function.
 
-In this case, the selected tracks are hard-coded, so you will need to modify the track selections to conform with your media. 
+In this case, the selected tracks are hard-coded, so you will need to modify the track selections to conform with your media.
+[documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/DoorAlarm.md)
 ## *Project Status*
-The initial release of DFPlay is in final testing ... Planned release in September 2018
-RC1 is posted. Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
+The initial release of DFPlay is in final testing and documentation is being written. Planned release in September 2018
+Test code is posted. Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
 
 > Written with [StackEdit](https://stackedit.io/).
