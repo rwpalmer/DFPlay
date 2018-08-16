@@ -1,17 +1,20 @@
 
+
 ## DoorAlarm.ino
 
 This example presents a typical IOT use case to demonstrate how DFPlay can be used to generate audible alarms / notifications as events occur.
 
 DoorAlarm.ino monitors the state of an imaginary door. The door sensor has been replaced by a Particle Function that allows you to toggle the door's state by typing "open" or "closed" and pressing the CALL button. 
 
-This is how the Particle Function is displayed in the Particle Console.  The "2" represents the return value, which represents the door's state (open = 1, closed = 2). 
+This is how the Particle Function is displayed in the Particle Console.  
 
-**![](https://github.com/rwpalmer/DFPlay/blob/master/images/DoorAlarmFunctions.png)**
+![](https://github.com/rwpalmer/DFPlay/blob/master/images/DoorAlarmFunctions.png)
+When the door is closed, "doorSensor = 2" will be displayed.
+When the door is open, "doorSensor = 1" will be displayed. 
 
 DoorAlarm.ino is designed to play two sounds:
-- One sound will play when the door’s status changes from "open" to “closed”.
-- Another sound will play when the door's status changes from "closed" to "open" and that sound will repeat every five minutes until the door returns to the closed state.    
+- One sound will play when the door’s status changes  to the “closed” state.
+- Another sound will play when the door's status changes to the "open" state,  and that sound will repeat every five minutes until the door returns to the "closed" state. 
 
 ### Preparing to use this Example:  
 
