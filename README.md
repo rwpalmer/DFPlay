@@ -62,7 +62,7 @@ Insert any SD media that contains .mp3 or .wav files into the DFPlayer, flash th
 
 #### PlaySelection.ino
 Use DFPlay library methods to control your DFPlayer ... without any coding. This example allows you to select media content and execute DFPlay methods via two Particle functions. 
-[documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/PlaySelection.md)
+[documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/PlaySolution.md)
 
 #### PlayList.ino
 Create a "playlist" and listen to your DFPlayer play it ... without any coding.  This example allows you to select media content and add it to a playlist. The playlist automatically starts playing when the first selection is added. Add as many selections as you like. 
@@ -72,8 +72,7 @@ Create a "playlist" and listen to your DFPlayer play it ... without any coding. 
 Monitor a virtual door. This example Plays one track when the door closes, and another track when the door opens, and replays it every five minutes while the door remains open. Door status is toggled via a Particle function.
 
 In this case, the selected tracks are hard-coded, so you will need to modify the track selections to conform with your media.
-[documentation]
-(https://github.com/rwpalmer/DFPlay/blob/master/doc/DoorAlarm.md)
+[documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/DoorAlarm.md)
 
 ## *Project Status*
 The initial release of DFPlay is in final testing and documentation is being written. Planned release in September 2018
