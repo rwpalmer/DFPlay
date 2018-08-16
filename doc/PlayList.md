@@ -4,7 +4,7 @@ DFPlay uses a "Selection" object to select the media content to play. A playlist
 
 PlayList.ino creates an empty vector and allows you to populate the vector by entering selections into a Particle function that looks like this on the Particle Console:
 
-![](https://lh5.googleusercontent.com/tEEtghIugrFSemLTFDPZp45JNd9K24GbCA3JJ4oDm2V1TpbS7kO0eCadpaws-66HR4H8R-OcHblgu7gZ5D4absuHA7eBzs5M7QrmfwCnBLfLOUf4tu2uKw8URvXHc1UhVqaCbqSn)
+![](https://github.com/rwpalmer/DFPlay/blob/master/images/PlayListFunctions.png)
 
 The DFPlayer will start playing after you enter the first selection. Additional selections may then be added while the DFPlayer is playing. Each new selection will be added to the end of the playlist, and each will play in turn. When the end of the playlist is reached, Playlist.ino will play it again. 
 
