@@ -7,7 +7,7 @@ Two Particle Functions are used:
 2. The second Particle Function is named "Method", and it permits you to enter the DFPlay method name that you wish to call. 
 
 When you bring up your device's Particle Console, the functions look like this:
-**![](https://lh3.googleusercontent.com/0Gls6G3F1G4DW30lso9ujectEat7KesjveMFdjGr5D7qpZcT2lfeTZRZMc2Ux3VghcY_4MICUCccMsivwwdWSVT6WqFuvn6VBBCoCy8EL_M8CT6j1OnaZ2gNKcDPob68Oydo5HTV)**
+**![](https://github.com/rwpalmer/DFPlay/blob/master/images/PlaySelectionFunctions.png)**
 
 ### To use this example
 * Flash your Particle device with the PlaySelection.ino code.
