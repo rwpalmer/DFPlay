@@ -26,6 +26,7 @@ The final point in this "overview" is to mention that there are times when a lib
 
 ## *Architecture*
 As you can see in the following drawing, DFPlay has one method named **manageDevice()** that handles ALL communication with the DFPlayer device. Every other DFPlay method simply updates and/or returns "state variables" that reside in memory. These methods complete their assigned tasks and return instantly. 
+
 ![alt text](https://github.com/rwpalmer/DFPlay/blob/master/images/DFPlayArchitecture.png)
 
 

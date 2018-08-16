@@ -4,12 +4,12 @@ DFPlay uses a "Selection" object to select the media content to play. A playlist
 
 PlayList.ino creates an empty vector and allows you to populate the vector by entering selections into a Particle function that looks like this on the Particle Console:
 
-![](https://github.com/rwpalmer/DFPlay/blob/master/images/PlayListFunctions.png)
+![](https://lh5.googleusercontent.com/tEEtghIugrFSemLTFDPZp45JNd9K24GbCA3JJ4oDm2V1TpbS7kO0eCadpaws-66HR4H8R-OcHblgu7gZ5D4absuHA7eBzs5M7QrmfwCnBLfLOUf4tu2uKw8URvXHc1UhVqaCbqSn)
 
 The DFPlayer will start playing after you enter the first selection. Additional selections may then be added while the DFPlayer is playing. Each new selection will be added to the end of the playlist, and each will play in turn. When the end of the playlist is reached, Playlist.ino will play it again. 
 
 ### Prerequisites:
-USB or SD Media with file and folder names that conform to DFPlayer requirements as documented in the DFPlay QuickStart Guide.
+USB or SD Media with file and folder names that conform to DFPlayer requirements as documented in the [***DFPlay QuickStart Guide***](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub).
 
 Unless you have memorized the track locations that you want to play, you might want to jot them down before you go further. Three or four selections is enough to get a sense for how this works.  Don't get carried away ... because the list will be lost when the Particle device reboots. 
 
@@ -23,7 +23,7 @@ Usage:
 4. Listen
 
 ### Selections:
-This section provides a list of selection objects and describes what they select. Hopefully, this will be enough to get you going. For more detail, please consult the DFPlay QuickStart Guide. 
+This section provides a list of selection objects and describes what they select. Hopefully, this will be enough to get you going. For more detail, please consult the [***DFPlay QuickStart Guide***](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub). 
 
 The following selections are presented as you might see them initialized in code:
 (Initialization string members are: **{media, folder, track, volAdj, equalizer}**) 

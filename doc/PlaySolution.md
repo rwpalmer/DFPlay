@@ -7,7 +7,7 @@ Two Particle Functions are used:
 2. The second Particle Function is named "Method", and it permits you to enter the DFPlay method name that you wish to call. 
 
 When you bring up your device's Particle Console, the functions look like this:
-**![](https://github.com/rwpalmer/DFPlay/blob/master/images/PlaySelectionFunctions.png)**
+**![](https://lh3.googleusercontent.com/0Gls6G3F1G4DW30lso9ujectEat7KesjveMFdjGr5D7qpZcT2lfeTZRZMc2Ux3VghcY_4MICUCccMsivwwdWSVT6WqFuvn6VBBCoCy8EL_M8CT6j1OnaZ2gNKcDPob68Oydo5HTV)**
 
 ### To use this example
 * Flash your Particle device with the PlaySelection.ino code.
@@ -35,7 +35,7 @@ While you play all of the tracks in a folder, or all of the tracks on the media,
 * "***skip***", to skip to the next track
 * "***softStop***", to stop automatically when the current track ends
 
-When LOGGING is enabled, this method can be used to display DFPlay's dialog with the DFPlayer on a Serial console. You will find information about how to enable  LOGGING in the DFPlay QuickStart Guide.
+When LOGGING is enabled, this method can be used to display DFPlay's dialog with the DFPlayer on a Serial console. You will find information about how to enable  LOGGING in the [***DFPlay QuickStart Guide***](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub).
 
 
 > Written with [StackEdit](https://stackedit.io/).

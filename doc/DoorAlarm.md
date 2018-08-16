@@ -25,7 +25,7 @@ You can either place the tracks that you want to play in these locations or you 
 Selection doorOpen = {2,16,1,0,0};
 Selection doorClosed = {2,16,2,0,0};
 ```
-Please consult the DFPlay QuickStart Guide if you need more information about how to configure Selections.
+Please consult the [***DFPlay QuickStart Guide***](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub) if you need more information about how to configure Selections.
 
 ### Running the Example:
 
@@ -35,7 +35,5 @@ Please consult the DFPlay QuickStart Guide if you need more information about ho
  4. Type "open", click CALL, and the door Open track should play every five minutes ... until the door closes. 
 
 Comments were inserted in the code to assist those who may wish to modify volume, the delay between notifications, or other settings.
-
-You could select a long track to play when the door is open, and have it repeat.
 
 > Written with [StackEdit](https://stackedit.io/).

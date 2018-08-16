@@ -24,7 +24,7 @@ time_t doorStateTime = 0;
 Selection doorOpen   = {2,16,1,0,0};    // <-- translates to --> media 2 (SD), folder 16, track 1, default volume, default equalizer
 Selection doorClosed = {2,16,2,0,0};    // <-- translates to --> media 2 (SD), folder 16, track 2, default volume, default equalizer
 DFPlay dfPlay;
-Timer timer(300000, renotify); // call renotify function every five minutes  (5 minutes * 60 seconds * 1000 = 300000)
+Timer timer(300000, renotify); // call renotify function every five minutes  (5 minutes * 60 seconds * 1000 = 300000 milliseconds)
 
 
 void setup() {

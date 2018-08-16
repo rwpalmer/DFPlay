@@ -3,12 +3,13 @@
     File:       PlaySD.ino 
     Version:    0.0.4 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
-    License:    GNU GPLv3
+    License:    GNU GPLv3   
 
-  	Insert any SD media that contains mp3 or wav files into the DFPlayer, flash the
-  	Particle device, and  listen to the music ... or whatever.
+  	If you have an SD card with .MP3 and/or .WAV content, this code will play all the tracks regardless of where
+	the files are stored, or what they are named. 
+		
+	LINK TO MORE INFORMATION ABOUT THIS EXAMPLE:
 	
-	Link to documentation: https://github.com/rwpalmer/DFPlay/blob/master/doc/PlaySD.md
  */
 
 #include "DFPlay.h"
@@ -17,42 +18,33 @@
 DFPlay dfPlay;
 void setup() {
     dfPlay.begin();					// Prepares DFPlay for execution
-    dfPlay.setVolume(10);			// Sets volume level to 10 (valid range = 0 to 30)
+    dfPlay.setVolume(15);			// Sets volume level to 10 (valid range = 0 to 30)
     Selection SDcard = {2,0,0,0,0}; // Selects all tracks on the SD card
     dfPlay.play(SDcard);			// Plays the selection
 }
 
 void loop() {
-    dfPlay.manageDevice();			// Sends requests to DFPlayer & processes responses. 
+    dfPlay.manageDevice();			// Sends commands to DFPlayer & processes returned data. 
 }
 
 
 
-
-
-
 /* Sample DFPlay log file captured while running this program: Test Duration 3 hours, 43 minutes
-
-
 Initialize
  Request: 7e ff 06 09 00 00 01 fe f1 ef 
  Request: 7e ff 06 09 00 00 02 fe f0 ef 
  Request: 7e ff 06 3f 00 00 00 fe bc ef 
 Response: 7e ff 06 3f 00 00 03 fe b9 ef
-
 Selection: {2,0,0,0,0}
 setVolume
  Request: 7e ff 06 06 00 00 0a fe eb ef
-
 Selection: {2,0,0,0,0}
 Select Media
  Request: 7e ff 06 09 00 00 02 fe f0 ef
-
 Selection: {2,0,0,0,0}
 Query Track Count
  Request: 7e ff 06 48 00 00 00 fe b3 ef
 Response: 7e ff 06 48 00 00 4e fe 65 ef
-
 Selection: {2,0,0,0,0}
 Play Media: {2,0,0,0,0} ... 78 Tracks
  Request: 7e ff 06 11 00 00 02 fe e8 ef
@@ -138,5 +130,12 @@ Stop
  Request: 7e ff 06 16 00 00 00 fe e5 ef
 Enter Sleep
  Request: 7e ff 06 0a 00 00 00 fe f1 ef
-
 */ 
+
+
+
+
+
+
+
+

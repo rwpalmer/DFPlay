@@ -5,50 +5,13 @@
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3
     
-    Description:  
-		Demonstrates how playlists can be defined and played with the DFPlay libray & logs to Serial console.
-	
-		DFPlay uses "Selection Objects" which can be instantiated and defined with commands like:
-			Selection SD =   	{2,0,0,0,0};    // selects all of the tracks on the SD media
-			Selection SD21 = 	{2,21,0,0,0};   // selects all of the tracks in folder 21 on the SD media
-			Selection SD21-4 =	{2,24,4,0,0];   // selects track 4 in folder 21 on the SD media 
-			
-		As you can see each Selection object has 5 members ...
-			The initialization string members are: {media, folder, track, volAdj, equalizer}. When the
-			last two members are zero, DFPlay uses the standard volume level and equalizer setting. For
-			more details, see the DFPlay Quick Start Guide. 
+  		DFPlay uses a "Selection" object to select the media content to play. A playlist is merely an array (or vector)  of "Selection" objects.  This example demonstrates how playlists can be defined and played using the DFPlay library. 
 
-		A playlist is simply an array or a vector of Selection objects. This sample program selects a
-		vector which allows us to add new Selections on-the-fly, via the Particle Console.
+	    PlayList.ino creates an empty vector and allows you to populate the vector by entering selections via a Particle Function and the Particle Console. The DFPlayer starts to play after you enter the first selection. 
 		
-		A vector can be predefined ... like the following:
-		std::vector<Selection> playlist  =  {{2,12,2,+1,0},{2,15,1,0,0},{2,100,1,0,0},{2,12,5,0,0},{2,15,6,+2,3},        
-											{2,12,33,0,0},{2,12,49,0,5},{2,12,44,0,0},{2,12,54,0,0},{2,12,55,0,0},      
-											{2,12,34,0,0},{2,15,3,0,5},{2,12,41,0,0},{2,12,18,0,0},{2,12,19,0,0},       
-											{2,12,18,0,0},{2,12,28,0,0},{2,12,38,0,0},{2,12,48,-1,0},{2,15,7,0,0}};     
-
-		but this sample program starts with an empty vector and has you enter the selections via the Particle
-		Console ... since you know where the tracks are on your media ... hopefully. If not, you'll need to find
-		out before going further.
+		LINK TO MORE INFORMATION ABOUT THIS EXAMPLE:
 		
-		This firmware's Particle Function  accepts Solution entry as an initializer string like: {2,81,44,-3,5}, but
-		Braces are optional, and trailing member elements can be omitted if they are zero ... 
-		so {2,81,0,0,0} can be simply entered as: 2,81 and {2,81,3,0,0} can be entered as: 2,81,3
-
-		
-		Also, please make sure your media conforms to DFPlayer folder and file naming standards.
-		
-			Folders must be named "01" to "99". A folder named "MP3" is also allowed, but DFPlayer can't play it
-			as a folder ... meaning there is no DFPlayer command to play "all of the tracks" within the MP3 folder.
-			To play tracks within the MP3 folder, select folder 100.
-			
-			To select individual tracks within Folders "01" to "15" and "MP3", file names must start with a 4-digit
-			file name prefix in the range of "0001" to "4095". A name like "0884 Tennessee Bird Walk.mp3" is valid.
-			
-			To select individual tracks within folders "16" to "99", file names must start with a 3-digit file name 
-			prefix in the range of "001" to "255". A name like "002 Beans In My Ears.wav" is valid. 
 */
-
 #include "DFPlay.h"
 #include <vector>
 
