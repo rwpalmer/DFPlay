@@ -9,6 +9,7 @@ DoorAlarm.ino monitors the state of an imaginary door. The door sensor has been 
 This is how the Particle Function is displayed in the Particle Console.  
 
 ![](https://github.com/rwpalmer/DFPlay/blob/master/images/DoorAlarmFunctions.png)
+
 When the door is closed, "doorSensor = 2" will be displayed.
 When the door is open, "doorSensor = 1" will be displayed. 
 
