@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DoorAlarm.ino
-    Version:    0.0.4 - August 2018
+    Version:    0.0.8 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 
@@ -9,6 +9,9 @@
 	DFPlay will play one track when the door opens ... and every 5 minutes while the door remains open.
 	DFPlay will play a second track when the door closes.
 	All toggles go through debounce logic, as if mechanical switches were being used. 
+	
+	LINK TO MORE INFORMATION ABOUT THIS EXAMPLE:
+			https://github.com/rwpalmer/DFPlay/blob/master/doc/DoorAlarm.md
  */
  
 #include <Particle.h>

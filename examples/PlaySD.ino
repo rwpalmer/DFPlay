@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       PlaySD.ino 
-    Version:    0.0.4 - August 2018
+    Version:    0.0.8 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 
@@ -9,7 +9,7 @@
 	the files are stored, or what they are named. 
 		
 	LINK TO MORE INFORMATION ABOUT THIS EXAMPLE:
-	
+			https://github.com/rwpalmer/DFPlay/blob/master/doc/PlaySD.md
  */
 
 #include "DFPlay.h"

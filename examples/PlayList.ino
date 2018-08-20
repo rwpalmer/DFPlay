@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       PlayList.ino 
-    Version:    0.0.4  August 2018
+    Version:    0.0.8  August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3
     
@@ -10,7 +10,7 @@
 	    PlayList.ino creates an empty vector and allows you to populate the vector by entering selections via a Particle Function and the Particle Console. The DFPlayer starts to play after you enter the first selection. 
 		
 		LINK TO MORE INFORMATION ABOUT THIS EXAMPLE:
-		
+				https://github.com/rwpalmer/DFPlay/blob/master/doc/PlayList.md
 */
 #include "DFPlay.h"
 #include <vector>

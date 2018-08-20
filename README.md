@@ -76,7 +76,8 @@ In this case, the selected tracks are hard-coded, so you will need to modify the
 [documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/DoorAlarm.md)
 
 ## *Project Status*
-The initial release of DFPlay is in final testing and documentation is being written. Planned release in September 2018
-Test code is posted. Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
+* Release Candidate 1 is posted
+* Planned release in September 2018
+* Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
 
 > Written with [StackEdit](https://stackedit.io/).

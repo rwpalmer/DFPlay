@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DFPlaySelections.ino
-    Version:    0.0.4 - August 2018
+    Version:    0.0.8 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 
@@ -10,7 +10,7 @@
 	Two Particle functions allow you to select media content and to enter DFPlay method names to play, pause, resume ... etc. 
 
 	LINK TO  MORE INFORMATION ABOUT THIS EXAMPLE:
-
+			https://github.com/rwpalmer/DFPlay/blob/master/doc/PlaySolution.md
 */
 
 
@@ -25,7 +25,7 @@ void setup() {
     Particle.function("Selection", setSelection);       // <-- this function updates the Selection object
     Particle.function("dfCommand",dfCommand);           // <-- this function executes DFPlay commands
     dfPlay.begin();           // <-- initializes the DFPlayer library
-    dfPlay.setVolume(7);     // <-- sets the default volume level ... (which may be adjusted by each Selection.volAdj)
+    dfPlay.setVolume(10);     // <-- sets the default volume level ... (which may be adjusted by each Selection.volAdj)
 }
 
 void loop() {

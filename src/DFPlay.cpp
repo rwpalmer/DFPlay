@@ -1,13 +1,13 @@
 /*
     Project:    DFPlay library
     File:       DFPlay.cpp 
-    Version:    0.0.4 - August 2018
+    Version:    0.0.8 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 */    
 #include "DFPlay.h"
 
-#define LOGGING true
+// #define LOGGING true // <-- uncomment this #define statement to enable logging to a Serial console. 
 
 
 // ----------------------------------------------------------------------------------------------------------------		
@@ -243,11 +243,11 @@ void DFPlay::manageDevice(void) {
 					// For Individual Track Plays ...
     				else {
     				    if (this->cState.firstEot) { // When playing individual tracks, DFPlayer returns duplicate End-Of-Track frames
-    				        this->cState.firstEot = false; // DFPlay sets this flag so it knows to act when the second frame arives.
-        				} else if (this->dState.repeat) {
+    				        this->cState.firstEot = false;  // DFPlay sets this flag so it knows to act when the second frame arives.
+        				} else if (this->dState.repeat) {           // The second EOF HAS arrived and repeat is TRUE
         				    this->dState.newSelection = true;
         				    this->cState.changePending = true;
-        				} else {
+        				} else {                                    // The second EOF HAS arrived and repeat is FALSE
                             this->dState.playState = IDLE;
         				    this->cState.changePending = true;
         				    #ifdef LOGGING
@@ -515,56 +515,64 @@ void DFPlay::manageDevice(void) {
 		#endif
 		uint16_t cs = 0xFEFB - (0x09 + this->dState.selection.media); // compute checksum
 		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x09, 0x00, 0x00, this->dState.selection.media, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
-		submitRequest(request,SUBMIT_INTERVAL);
+		submitRequest(request,SUBMIT_INTERVAL*5);
 		this->cState.media = this->dState.selection.media;
 		return;
     }
 	
-    // RULE C4 - Play all tracks on the media
+    // RULE C4 - Play tracks on the media
 	if (this->dState.selection.folder == 0) {
-		if (this->cState.tracks == 0) { // Issue the DFPlayer command to query the number of files on the media
-			#ifdef LOGGING
-			    Serial.println("Query Track Count");
-		    #endif
-			if (this->dState.selection.media == USB)  {
-				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x47, 0x00, 0x00, 0x00, 0xFE, 0xB4, 0xEF};
-				submitRequest(request,SUBMIT_INTERVAL);
-			} else { // selection media == SD
-				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x48, 0x00, 0x00, 0x00, 0xFE, 0xB3, 0xEF};
-				submitRequest(request,SUBMIT_INTERVAL);
-			}
-			cState.tracks--;
-			return;   
-		} else if (cState.tracks > 0) {
-		// Issue the DFPlayer command to play the media
+	    if (this->dState.selection.track == 0) {
+    		if (this->cState.tracks == 0) { // Issue the DFPlayer command to query the number of files on the media
+    			#ifdef LOGGING
+    			    Serial.println("Query Track Count");
+    		    #endif
+    			if (this->dState.selection.media == USB)  {
+    				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x47, 0x00, 0x00, 0x00, 0xFE, 0xB4, 0xEF};
+    				submitRequest(request,SUBMIT_INTERVAL);
+    			} else { // selection media == SD
+    				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x48, 0x00, 0x00, 0x00, 0xFE, 0xB3, 0xEF};
+    				submitRequest(request,SUBMIT_INTERVAL);
+    			}
+    			cState.tracks--;
+    			return;   
+    		} else if (cState.tracks > 0) {
+    		// Issue the DFPlayer command to play the media
+        		#ifdef LOGGING
+        			Serial.printf("Play Media: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
+        			this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
+        			this->dState.selection.volAdj, this->dState.selection.equalizer, this->cState.tracks);
+        		#endif
+        		uint16_t cs = 0xFEFB - (0x11 + this->dState.selection.media); // compute checksum
+        		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x11, 0x00, 0x00,  this->dState.selection.media, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
+        		submitRequest(request,SUBMIT_INTERVAL, MEDIA);
+        		return;
+    		} else if (cState.tracks == -8) { // timeout after 40 SUBMIT_INTERVALS
+    		    this->dState.playState = IDLE;
+    		    this->cState.idleMillis = millis();
+    		    this->cState.playState = IDLE;
+    		    this->cState.changePending = true;
+    		    return;
+    		} else { 
+    		    this->cState.tracks--;
+    		    this->cState.noSubmitsTil = (millis() + (5* (int)SUBMIT_INTERVAL));
+    		    Serial.println("waiting for Query ...");
+    		    return;
+    	    }
+	    } else { // dState.selection.track is not 0, so we play a track based on a track number.
     		#ifdef LOGGING
-    			Serial.printf("Play Media: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
-    			this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
-    			this->dState.selection.volAdj, this->dState.selection.equalizer, this->cState.tracks);
+    			Serial.printf("Play Track#: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
+    			this->dState.selection.track, this->dState.selection.volAdj, this->dState.selection.equalizer);
     		#endif
-    		uint16_t cs = 0xFEFB - (0x11 + this->dState.selection.media); // compute checksum
-    		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x11, 0x00, 0x00,  this->dState.selection.media, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
-    		submitRequest(request,SUBMIT_INTERVAL);
-    		this->cState.playState = PLAYING;
-    		this->cState.playType = MEDIA;
-    		this->dState.newSelection = false;
-    		this->cState.changePending = false;
+    		uint16_t cs = 0xFEFB - (0x08 + (this->dState.selection.track / 256) + (this->dState.selection.track % 256)); // compute checksum
+    		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x08, 0x00, (uint8_t)(this->dState.selection.track / 256), 
+    		    (uint8_t)(this->dState.selection.track % 256), (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
+    		submitRequest(request,SUBMIT_INTERVAL,TRACK);
     		return;
-		} else if (cState.tracks == -8) { // timeout after 40 SUBMIT_INTERVALS
-		    this->dState.playState = IDLE;
-		    this->cState.idleMillis = millis();
-		    this->cState.playState = IDLE;
-		    this->cState.changePending = true;
-		    return;
-		} else { 
-		    this->cState.tracks--;
-		    this->cState.noSubmitsTil = (millis() + (5* (int)SUBMIT_INTERVAL));
-		    Serial.println("waiting for Query ...");
-		    return;
 	    }
 	}   
 
-	// RULE C5 - Play all tracks on in a folder
+	// RULE C5 - Play all the tracks in a folder
 	if (this->dState.selection.track == 0) {
 		if (this->cState.tracks == 0) { // Issue the DFPlayer command to query the number of files in a folder
 			#ifdef LOGGING
@@ -584,11 +592,7 @@ void DFPlay::manageDevice(void) {
         	#endif
         	uint16_t cs = 0xFEFB - (0x17 + this->dState.selection.folder); // compute checksum
         	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x17, 0x00, 0x00,  this->dState.selection.folder, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
-        	submitRequest(request,SUBMIT_INTERVAL);
-        	this->cState.playState = PLAYING;
-        	this->cState.playType = FOLDER;
-        	this->dState.newSelection = false;
-        	this->cState.changePending = false;
+        	submitRequest(request,SUBMIT_INTERVAL, FOLDER);
         	return;
 		} else if (cState.tracks == -8) { // timeout after 40 SUBMIT_INTERVALS
 		    this->dState.playState = IDLE;
@@ -613,12 +617,7 @@ void DFPlay::manageDevice(void) {
 		uint16_t dbyte = ((this->dState.selection.folder * 4096) + this->dState.selection.track);
 		uint16_t cs = 0xFEFB - (0x14 + (dbyte / 256) + (dbyte % 256)); // compute checksum
 		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x14, 0x00, (uint8_t)(dbyte / 256), (uint8_t)(dbyte % 256), (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
-		submitRequest(request,SUBMIT_INTERVAL);
-		this->cState.playState = PLAYING;
-		this->cState.playType = TRACK;
-		this->dState.newSelection = false;
-		this->cState.changePending = false;
-		this->cState.firstEot = true;
+		submitRequest(request,SUBMIT_INTERVAL, TRACK);
 		return;
 	}
 
@@ -630,17 +629,25 @@ void DFPlay::manageDevice(void) {
     	#endif
     	uint16_t cs = 0xFEFB - (0x0F + this->dState.selection.folder + this->dState.selection.track); // compute checksum
     	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x0F, 0x00, this->dState.selection.folder, (uint8_t)this->dState.selection.track, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
-    	submitRequest(request,SUBMIT_INTERVAL);
-    	this->cState.playState = PLAYING;
-    	this->cState.playType = TRACK;
-    	this->dState.newSelection = false;
-    	this->cState.changePending = false;
-    	this->cState.firstEot = true;
+    	submitRequest(request,SUBMIT_INTERVAL, TRACK);
     	return;
     }
-    
-	// RULE C8 - Play a track from the MP3 folder ... Track must have a 4-digit file name prefix
+	
+	// RULE C8 - Play a track from the root folder ... Track must have a 4-digit file name prefix
     if (this->dState.selection.folder == 100) {
+		#ifdef LOGGING
+			Serial.printf("Play root: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
+			this->dState.selection.track, this->dState.selection.volAdj, this->dState.selection.equalizer);
+		#endif
+		uint16_t cs = 0xFEFB - (0x03 + (this->dState.selection.track / 256) + (this->dState.selection.track % 256)); // compute checksum
+		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x03, 0x00, (uint8_t)(this->dState.selection.track / 256), 
+		    (uint8_t)(this->dState.selection.track % 256), (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
+		submitRequest(request,SUBMIT_INTERVAL, TRACK);
+		return;
+    }
+    
+	// RULE C9 - Play a track from the MP3 folder ... Track must have a 4-digit file name prefix
+    if (this->dState.selection.folder == 101) {
 		#ifdef LOGGING
 			Serial.printf("Play MP3: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
 			this->dState.selection.track, this->dState.selection.volAdj, this->dState.selection.equalizer);
@@ -648,22 +655,29 @@ void DFPlay::manageDevice(void) {
 		uint16_t cs = 0xFEFB - (0x12 + (this->dState.selection.track / 256) + (this->dState.selection.track % 256)); // compute checksum
 		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x12, 0x00, (uint8_t)(this->dState.selection.track / 256), 
 		    (uint8_t)(this->dState.selection.track % 256), (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
-		submitRequest(request,SUBMIT_INTERVAL);
-		this->cState.playState = PLAYING;
-		this->cState.playType = TRACK;
-		this->dState.newSelection = false;
-		this->cState.changePending = false;
-		this->cState.firstEot = true;
+		submitRequest(request,SUBMIT_INTERVAL,TRACK);
 		return;
     }
-    return;
+    
+	return;
 } // end of manageDevice()
     
 /* ================================================================================================ submitRequest()
 		Write Request Frames to Serial 1
    =============================================================================================================
 */
-void DFPlay::submitRequest(uint8_t request[] ,uint16_t dlay) {
+void DFPlay::submitRequest(uint8_t request[], uint16_t dlay, uint8_t ptype) {
+	this->cState.playState = PLAYING;
+	this->cState.playType = ptype;
+	this->dState.newSelection = false;
+	this->cState.changePending = false;
+	if(ptype == TRACK) {
+	    if (dState.selection.folder == 0) this->cState.firstEot = false; // DFPlayer command 0x08 returns one End-Of-Track notification
+	    else this->cState.firstEot = true; // ALL other DFPlayer "track play" commands return two ... 
+	}
+	submitRequest(request, dlay);
+}
+void DFPlay::submitRequest(uint8_t request[], uint16_t dlay) {
     uint8_t requestLength = request[LEN] + 4;
     #ifdef LOGGING
         Serial.print(" Request:");
@@ -678,16 +692,23 @@ void DFPlay::submitRequest(uint8_t request[] ,uint16_t dlay) {
 
     
 /*  DFPlayer Notes:
-    1.  This program uses the "noSubmitTil" variable to manage the timing of commands sent to the DFPlayer. The 
-        minimum interval is defined by the SUBMIT_INTERVAL constant ... 30ms by default. 
-    2.  When querying the number of tracks in a folder, an extra-long interval is required (5 times the normal)
-    3.  In most circumstances, a 0x16 (stop) command can be issued immediately after a 0x3c/d/e (end-of-play) frame  
+
+	    TIMING ADJUSTMENTS MAY BE REQUIRED IN SCENDARIOS WHERE VERY LARGE TRACK COUNTS ARE USED. 
+
+    1. This program uses the "noSubmitTil" variable to manage the timing of commands sent to the DFPlayer. The 
+        minimum interval is defined by the SUBMIT_INTERVAL constant ... 30ms by default. (DFPlay.h CLASS CONSTANT)
+		
+    2. When querying the number of tracks in a folder or on the media DFPlayer can take MUCH MUCH longer. This program 
+		checks for completion every 5 SUBMIT_INTERVALs up to eight times before timing out. (Rules C4 and C5)
+		
+    3. In most circumstances, a 0x16 (stop) command can be issued immediately after a 0x3c/d/e (end-of-play) frame  
         is received, but there is a timing problem when the 0x17 command is playing a folder and we want to stop
         after the last track in the folder. Based on testing, we need to insert a 100-250ms delay before the 0x16 (stop)
-        command is issued.
-	    TIMING ADJUSTMENTS MAY BE REQUIRED IN SCENDARIOS WHERE VERY LARGE TRACK COUNTS ARE USED. 
-	4.  When playing single tracks, DFPlayer returns duplicate end-of-track frames. You will see this if LOGGING is
-	    enabled. This library ignores the first eot frame and acts on the second. 
+        command is issued. (When processing frames 3C and 3D, and Rule B1)
+		
+	4. When playing single tracks,  DFPlayer returns duplicate end-of-track frames (except for the 0x08 command). 
+		You will see this if LOGGING is enabled. This library ignores the first eot frame and acts on the second. 
+		(cState.firstEot exists to manage this odd behavior). 
 */    
     
     

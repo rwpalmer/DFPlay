@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       PlaySD-timer.ino 
-    Version:    0.0.4 - August 2018
+    Version:    0.0.8 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3  
     
@@ -11,10 +11,11 @@
     is set to call manageDevice() every 20ms. 
 
     Using this example:
-  	    Insert any SD media that contains mp3 or wav files into the DFPlayer, flash the
-  	    Particle device, and  listen to the music ... or whatever.
-	
-	Link to documentation: https://github.com/rwpalmer/DFPlay/blob/master/doc/PlaySD.md
+    If you have an SD card with .MP3 and/or .WAV content, this code will play all the tracks regardless of where
+	the files are stored, or what they are named. 
+		
+	LINK TO MORE INFORMATION ABOUT THIS EXAMPLE:
+			https://github.com/rwpalmer/DFPlay/blob/master/doc/PlaySD.md
  */
 
 #include "DFPlay.h"

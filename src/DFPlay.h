@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DFPlay.h
-    Version:    0.0.4 - August 2018
+    Version:    0.0.8 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 */    #ifndef __DFPLAY_H_
@@ -90,6 +90,7 @@ class DFPlay {
 
 // PRIVATE METHODS
         void submitRequest(uint8_t[] ,uint16_t);
+        void submitRequest(uint8_t[] ,uint16_t, uint8_t);
         
 // PUBLIC METHODS        
     public:
