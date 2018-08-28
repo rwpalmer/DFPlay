@@ -22,7 +22,7 @@ While it is true that the DFPlayer can be used without a library, it is also tru
 
 So DFPlay offers ease-of-use and enhanced functionality. In the following "Architecture" section, you will see how it can manage the DFPlayer with minimal impact on system resources. 
 
-The final point in this "overview" is to mention that there are times when a library can not or should not be used. DFPlay's QuickStart Guide, PlaySolution.ino example, and LOGGING functions  were developed with the hope that they can assist those who are simply looking for to build their understanding of the DFPlayer and its native command set.  
+The final point in this "overview" is to mention that there are times when a library can not or should not be used. DFPlay's QuickStart Guide, PlaySolution.ino example, and LOGGING functions  were developed with the hope that they can assist those who use the library and those who are simply looking for to build their understanding of the DFPlayer and its native command set.  
 
 ## *Architecture*
 As you can see in the following drawing, DFPlay has one method named **manageDevice()** that handles ALL communication with the DFPlayer device. Every other DFPlay method simply updates and/or returns "state variables" that reside in memory. These methods complete their assigned tasks and return instantly. 
