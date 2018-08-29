@@ -61,15 +61,16 @@ class CurrentState {
         uint8_t		volume;         	// the current volume state (0 to 30)
         uint8_t		media;          	// identifies the currently selected media (USB, SD, SLEEP)  
         uint8_t		playType; 			// the current play type (TBD, MEDIA, FOLDER, or TRACK)      
-        bool	    usbAttached;	    // true indicates that a USB key is attached to the DFPlayer
-        bool		sdAttached;		    // true indicates that an SD card is attached to the DFPlayer
-        bool        sleeping;       	// true indicates that the DFPlayer is in low-power mode
-        bool        changePending;	    // true tells manageDevice() that a state change is pending
-        bool        firstEot;       	// true identifies first End-Of-Track frame 
-		uint32_t	noSubmitsTil;		// the time when the DFPlayer will be ready to accept the next command
-        uint32_t	trackCount;     	// the number of tracks that have been played in a folder or media selection
-        uint32_t    idleMillis;     	// millis when cState.playState was set to IDLE
-		int    	    tracks;         	// the number of tracks in a folder or media selection
+		bool			playFailure;		// true indicates that the last play command returned an error
+		bool	    	usbAttached;	    // true indicates that a USB key is attached to the DFPlayer
+        bool			sdAttached;	    // true indicates that an SD card is attached to the DFPlayer
+        bool        	sleeping;       	// true indicates that the DFPlayer is in low-power mode
+        bool        	changePending;	// true tells manageDevice() that a state change is pending
+        bool        	firstEot;       		// true identifies first End-Of-Track frame 
+		uint32_t		noSubmitsTil;		// the time when the DFPlayer will be ready to accept the next command
+        uint32_t		trackCount;     	// the number of tracks that have been played in a folder or media selection
+        uint32_t    	idleMillis;     		// millis when cState.playState was set to IDLE
+		int    	    	tracks;         		// the number of tracks in a folder or media selection
 };		
 
 class DFPlay {
@@ -117,6 +118,7 @@ class DFPlay {
         bool isPaused(void);
         bool isRepeating(void);
         bool isSleeping(void);
+		bool playFailure(void);
         void manageDevice(void);
 };
 #endif

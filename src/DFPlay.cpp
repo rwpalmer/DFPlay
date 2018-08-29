@@ -29,6 +29,7 @@ void DFPlay::begin(void) {    //  initialize class members and query DFPlayer to
     this->cState.volume = 30;
     this->cState.media = 0;
     this->cState.playType = TBD;
+	this->cState.playFailure = false;
     this->cState.usbAttached = false;
     this->cState.sdAttached = false;
     this->cState.noSubmitsTil = 0;
@@ -53,6 +54,7 @@ void DFPlay::play(Selection& sel) {
     this->dState.skip = false;
 	this->cState.tracks = 0;
 	this->cState.changePending = true;
+	this->cState.playFailure = false;
     return;
 }
 void DFPlay::pause(void)  {
@@ -140,6 +142,7 @@ bool DFPlay::isPlaying(void)			{ if (this->dState.playState == PLAYING)	return t
 bool DFPlay::isPaused(void) 			{ if (this->dState.playState == PAUSED) 	return true;    else return false; }
 bool DFPlay::isRepeating(void)       { if (this->dState.repeat) return true; else return false; }
 bool DFPlay::isSleeping(void)         { return this->cState.sleeping; }
+bool DFPlay::playFailure(void)			{ return this->cState.playFailure; }
 
 
 // ----------------------------------------------------------------------------------------------------------------		
@@ -284,6 +287,7 @@ void DFPlay::manageDevice(void) {
 						this->cState.idleMillis = millis();
 						this->dState.playState = IDLE;
                         this->cState.changePending = true;
+						this->cState.playFailure = true;
 			            #ifdef LOGGING
 			                Serial.println("Play Failure ...");
 			            #endif

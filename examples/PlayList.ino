@@ -21,7 +21,7 @@
     uint16_t plx = 0; // <-- playList index                                                                        
     Selection emptySelection = {0,0,0,0,0}; // <-- empty selection object for clearing Selection objects (as used on the next line) 
     Selection selection = emptySelection;   // <-- selection specified by the "setSelection" Particle Function ...
-
+    bool playFailureHandled = false;
 
 void setup() {
     Particle.function("Selection", setSelection);       // <-- this function is used to enter Selection objects
@@ -36,8 +36,16 @@ void loop() {
     
     // -------------------------------------------------  Decides what to play next based on Particle Function dfCommand() input
     if (dfPlay.isIdle()) {
+        // if the last play failed, delete the Selection from the playlist
+        if ((dfPlay.playFailure()) && (!playFailureHandled)) {
+            playlist.erase(playlist.begin() + --plx);
+            Serial.printf("                                         playFailure is true: Selection %d deleted\n\r", plx+1);
+            playFailureHandled = true;
+        }
+        // Play the next Selection in the playlist
 		if (plx < playlist.size()) {
 			dfPlay.play(playlist[plx]);
+			playFailureHandled = false;
 			Serial.printf("\n\r---------------------------------------- Playing Selection %d:{%d,%d,%d,%d,%d}\n\r", plx+1,
 				playlist[plx].media,playlist[plx].folder, playlist[plx].track, playlist[plx].volAdj, playlist[plx].equalizer); 
 			plx++;
