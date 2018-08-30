@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DFPlay.h
-    Version:    0.0.8 - August 2018
+    Version:    0.0.9 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 */    #ifndef __DFPLAY_H_

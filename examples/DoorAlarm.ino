@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DoorAlarm.ino
-    Version:    0.0.8 - August 2018
+    Version:    0.0.9 - August 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 
@@ -15,7 +15,7 @@
  */
  
 #include <Particle.h>
-#include "DFPlay.h"
+#include <DFPlay.h>
 
 const uint8_t UNKNOWN = 0, OPEN = 1, CLOSED = 2;
 const uint32_t DEBOUNCE_MILLIS = 200;
