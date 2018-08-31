@@ -17,7 +17,8 @@
 
 DFPlay dfPlay;
 void setup() {
-    dfPlay.begin();					// Prepares DFPlay for execution
+    Serial1.begin(9600);
+    dfPlay.begin(Serial1);					// Prepares DFPlay for execution
     dfPlay.setVolume(15);			// Sets volume level to 10 (valid range = 0 to 30)
     Selection SDcard = {2,0,0,0,0}; // Selects all tracks on the SD card
     dfPlay.play(SDcard);			// Plays the selection
