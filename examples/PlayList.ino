@@ -25,7 +25,7 @@
 
 void setup() {
     Particle.function("Selection", setSelection);       // <-- this function is used to enter Selection objects
-    Serial.begin(9600);
+    Serial1.begin(9600);
     dfPlay.begin(Serial1);           // <-- initializes the DFPlayer library
     dfPlay.setVolume(10);     // <-- sets the default volume level
 }
