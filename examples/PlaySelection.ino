@@ -24,7 +24,8 @@
 void setup() {
     Particle.function("Selection", setSelection);       // <-- this function updates the Selection object
     Particle.function("dfCommand",dfCommand);           // <-- this function executes DFPlay commands
-    dfPlay.begin();           // <-- initializes the DFPlayer library
+    Serial1.begin(9600);
+    dfPlay.begin(Serial1);           // <-- initializes the DFPlayer library
     dfPlay.setVolume(10);     // <-- sets the default volume level ... (which may be adjusted by each Selection.volAdj)
 }
 

@@ -33,7 +33,8 @@ Timer timer(300000, renotify); // call renotify function every five minutes  (5 
 void setup() {
     Particle.function("DoorSensor",DoorSensor);
     Serial.begin(115200);
-    dfPlay.begin();         // Prepare DFPlay for execution
+    Serial1.begin(9600);
+    dfPlay.begin(Serial1);         // Prepare DFPlay for execution
     dfPlay.setVolume(10);   // Set DFPlayer Volume level
 }
 
