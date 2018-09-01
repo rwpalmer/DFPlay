@@ -76,7 +76,7 @@ In this case, the selected tracks are hard-coded, so you will need to modify the
 [documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/DoorAlarm.md)
 
 ## *Project Status*
-* Release 0.0.9  = Released for field testing (Release Candidate 1)
+* Release 0.0.9 released for field testing (Release Candidate 1)
 * Release 1 planned for September 30, 2018
 * Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
 
