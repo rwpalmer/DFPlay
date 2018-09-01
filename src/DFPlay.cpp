@@ -7,7 +7,7 @@
 */    
 #include <DFPlay.h>
 
-// #define DFPLAY_DEBUG_SERIAL Serial // <-- uncomment this #define statement to enable logging to a Serial console. 
+#define DFPLAY_DEBUG_SERIAL Serial // <-- uncomment this #define statement to enable logging to a Serial console. 
 
 
 // ----------------------------------------------------------------------------------------------------------------		
@@ -40,8 +40,8 @@ void DFPlay::begin(Stream& s) {    //  initialize class members and query DFPlay
     this->cState.changePending = true;
 	this->cState.idleMillis = 0;
 	this->cState.firstEot = true;
-    #ifdef DFPLAY_DEBUG_SERIAL 
-        DFPLAY_DEBUG_SERIAL.println("Initialize");
+    #ifdef DFPLAY_DEBUG_SERIAL
+		this->cState.noSubmitsTil = millis() + 3000;
     #endif
 	return;
 }
@@ -354,6 +354,9 @@ void DFPlay::manageDevice(void) {
     // RULE A4 - When the MPU boots, make sure DFPlayer is not sleeping and query the media status
     if (this->cState.playState == INITIALIZE) { // this state is set by begin()
         if (this->cState.media == 0) {          // this will wake DFPlayer if USB media is attached
+			#ifdef DFPLAY_DEBUG_SERIAL	       
+				DFPLAY_DEBUG_SERIAL.println("Initialize");
+			#endif
 		    uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x09, 0x00, 0x00, 0x01, 0xFE, 0xF1, 0xEF };
 		    submitRequest(request,SUBMIT_INTERVAL*3);
 		    this->cState.media++;
