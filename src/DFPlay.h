@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DFPlay.h
-    Version:    0.0.9 - August 2018
+    Version:    0.0.10 - September 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 */    
@@ -90,7 +90,7 @@ class DFPlay {
         static const uint8_t FST=0, VER=1, LEN=2, CMD=3, FBK=4, MSB=5, LSB=6, CMSB=7, CLSB=8, LST=9; // Response frame byte names 
 
 	//	CLASS MEMBERS
-    Stream *stream;
+		Stream *stream;
 		DesiredState dState;
 		CurrentState cState;
         uint8_t frame[RESPONSE_FRAME_SIZE] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};  // Response frame

@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DoorAlarm.ino
-    Version:    0.0.9 - August 2018
+    Version:    0.0.10 - September 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 
