@@ -57,6 +57,7 @@ class DesiredState {
         bool			softStop;       	// when true, play will stop when the current track ends
         bool        	repeat;         		// when true, selection play will repeat
         bool        	skip;           		// when true, skip to next track
+		bool			back;				// when true, skip to the prior track
     };
 
 class CurrentState {
@@ -111,6 +112,7 @@ class DFPlay {
         void stop(void);
         void softStop(void);
         void skip(void);
+		void back(void);
         uint8_t setVolume(uint8_t);
         uint8_t volumeUp(void);
         uint8_t volumeDown(void);

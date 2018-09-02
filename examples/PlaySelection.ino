@@ -1,6 +1,6 @@
 /*
     Project:    DFPlay library
-    File:       DFPlaySelections.ino
+    File:       PlaySelections.ino
     Version:    0.0.10 - September 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
@@ -49,6 +49,7 @@ int dfCommand(String cmd) {
     if (cmd.equalsIgnoreCase("stop"))           { dfPlay.stop();  return 0; }
     if (cmd.equalsIgnoreCase("softStop"))       { dfPlay.softStop(); return 0; }
     if (cmd.equalsIgnoreCase("skip"))           { dfPlay.skip(); return 0; }
+	if (cmd.equalsIgnoreCase("back"))			{ dfPlay.back(); return 0; }
     if (cmd.equalsIgnoreCase("play"))           { dfPlay.play(selection); return 0; }
     return -1;
 }

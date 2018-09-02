@@ -25,6 +25,7 @@ void DFPlay::begin(Stream& s) {    //  initialize class members and query DFPlay
     this->dState.repeat = false;
     this->dState.softStop = false;
     this->dState.skip = false;
+	this->dState.back = false;
     this->cState.playState = INITIALIZE; // <-- tells manageDevice() to perform the DFPlayer initialization sequence
     this->cState.equalizer = 0;
     this->cState.volume = 30;
@@ -41,7 +42,7 @@ void DFPlay::begin(Stream& s) {    //  initialize class members and query DFPlay
 	this->cState.idleMillis = 0;
 	this->cState.firstEot = true;
     #ifdef DFPLAY_DEBUG_SERIAL
-		this->cState.noSubmitsTil = millis() + 3000;
+		this->cState.noSubmitsTil = millis() + 3000; // allow time for the Serial connection to be established before initializing the DFPlayer
     #endif
 	return;
 }
@@ -51,6 +52,7 @@ void DFPlay::play(Selection& sel) {
     this->dState.playState = PLAYING;
     this->dState.softStop = false;
     this->dState.skip = false;
+	this->dState.back = false;
 	this->cState.tracks = 0;
 	this->cState.changePending = true;
 	this->cState.playFailure = false;
@@ -89,6 +91,13 @@ void DFPlay::softStop(void)	{
 void DFPlay::skip(void) {
     if (this->cState.playState == PLAYING) {
         this->dState.skip = true;
+        this->cState.changePending = true;
+    }
+    return;
+}
+void DFPlay::back(void) {
+    if (this->cState.playState == PLAYING) {
+        this->dState.back = true;
         this->cState.changePending = true;
     }
     return;
@@ -426,7 +435,24 @@ void DFPlay::manageDevice(void) {
     	this->dState.skip = false;
 		return;
     }
-    
+    // RULE B1 - Back to the prior track
+    if ((this->dState.back) && (this->cState.playState == PLAYING)) {
+		if ( ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA))) {
+			if (this->cState.trackCount > 0) {
+				#ifdef DFPLAY_DEBUG_SERIAL
+					DFPLAY_DEBUG_SERIAL.println("Back");
+				#endif
+				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x02, 0x00, 0x00, 0x00, 0xFE, 0xF9, 0xEF };
+				submitRequest(request,SUBMIT_INTERVAL);
+				this->cState.trackCount--;
+				this->cState.idleMillis = millis();
+				this->cState.changePending = false;
+			}
+		}
+    	this->dState.back = false;
+		return;
+    }
+      
     // RULE B2 - Make sure DFPlayer is stopped when IDLE is the desired playState
 	if ((this->dState.playState == IDLE) && (this->cState.playState != IDLE)) {
 		#ifdef DFPLAY_DEBUG_SERIAL
