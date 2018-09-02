@@ -1,7 +1,3 @@
-
-
-
-
 # ***DFPlay***
  ***An Enhanced Library for the DFPlayer***
 
@@ -79,7 +75,9 @@ In this case, the selected tracks are hard-coded, so you will need to modify the
 * Version 0.0.9 has been released for field testing (Particle Platform only) 
 * Version 0.0.10 is a work in progress ...
 	- Arduino support has been added
+	- back() method has been added
 * Release 1 planned for September 30, 2018
-* Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
+---
+Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
 
 > Written with [StackEdit](https://stackedit.io/).
