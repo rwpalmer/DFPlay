@@ -427,6 +427,7 @@ void DFPlay::manageDevice(void) {
  		            this->dState.playState = IDLE; // no repeat, so signal a hard stop
   		            // DFPlayer requires extra time to process when stopping after the last track in a folder or on media
  		            this->cState.noSubmitsTil = millis() + 100; // see note 3 at the bottom of this file for more detail
+ 		            this->cState.changePending = true;
  		        }
         	}
 		} else { // playing an individual track
