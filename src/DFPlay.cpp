@@ -5,7 +5,7 @@
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 */    
-#include <DFPlay.h>
+#include "DFPlay.h"
 
 #define DFPLAY_DEBUG_SERIAL Serial // <-- uncomment this #define statement to enable logging to a Serial console. 
 
