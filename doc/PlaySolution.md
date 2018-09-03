@@ -33,9 +33,10 @@ When you bring up your device's Particle Console, the functions look like this:
 
 While you play all of the tracks in a folder, or all of the tracks on the media, you can also use:
 * "***skip***", to skip to the next track
+* "***back***", to replay the previous track
 * "***softStop***", to stop automatically when the current track ends
 
 When LOGGING is enabled, this method can be used to display DFPlay's dialog with the DFPlayer on a Serial console. You will find information about how to enable  LOGGING in the [***DFPlay QuickStart Guide***](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub).
 
 
-> Written with [StackEdit](https://stackedit.io/).
+> Written wit
