@@ -34,16 +34,17 @@ void DFPlay::begin(Stream& s) {    //  initialize class members and query DFPlay
 	this->cState.playFailure = false;
     this->cState.usbAttached = false;
     this->cState.sdAttached = false;
-    this->cState.noSubmitsTil = 0;
     this->cState.tracks = 0;
     this->cState.trackCount = 0;
     this->cState.sleeping = false;
     this->cState.changePending = true;
 	this->cState.idleMillis = 0;
 	this->cState.firstEot = true;
-    #ifdef DFPLAY_DEBUG_SERIAL
+    #if defined(DFPLAY_DEBUG_SERIAL) && defined(SPARK) 
 		this->cState.noSubmitsTil = millis() + 3000; // allow time for the Serial connection to be established before initializing the DFPlayer
-    #endif
+	#else 
+		this->cState.noSubmitsTil = 0; 
+	#endif
 	return;
 }
 void DFPlay::play(Selection& sel) {
@@ -142,19 +143,20 @@ void DFPlay::unmute(void) {
     if (this->isPlaying()) this->cState.changePending = true;
     return;
 }
-void DFPlay::repeat (void)            	{ this->dState.repeat = true; return; }
-void DFPlay::norepeat(void)			{ this->dState.repeat = false; return; }
-bool DFPlay::isMuted(void)      		{ return this->dState.muted; }
-bool DFPlay::isIdle(void) 				{ if (this->dState.playState == IDLE) 		return true;    else return false; }
-bool DFPlay::isPlaying(void)			{ if (this->dState.playState == PLAYING)	return true;  	else return false; }
-bool DFPlay::isPaused(void) 			{ if (this->dState.playState == PAUSED) 	return true;    else return false; }
-bool DFPlay::isRepeating(void)       { if (this->dState.repeat) return true; else return false; }
-bool DFPlay::isSleeping(void)         { return this->cState.sleeping; }
+void DFPlay::repeat (void)            		{ this->dState.repeat = true; return; }
+void DFPlay::norepeat(void)				{ this->dState.repeat = false; return; }
+bool DFPlay::isMuted(void)      			{ return this->dState.muted; }
+bool DFPlay::isIdle(void) 					{ if (this->dState.playState == IDLE) 		return true;    else return false; }
+bool DFPlay::isPlaying(void)				{ if (this->dState.playState == PLAYING)	return true;  	else return false; }
+bool DFPlay::isPaused(void) 				{ if (this->dState.playState == PAUSED) 	return true;    else return false; }
+bool DFPlay::isRepeating(void)       	{ if (this->dState.repeat) return true; else return false; }
+bool DFPlay::isSleeping(void)         	{ return this->cState.sleeping; }
 bool DFPlay::playFailure(void)			{ return this->cState.playFailure; }
+uint32_t DFPlay::getTrackCount(void)	{ return cState.trackCount; }
 
 
 // ----------------------------------------------------------------------------------------------------------------		
-// ------------------------------------------------ PRIVATE METHODS -----------------------------------------------
+// ------------------------------------------------ manageDevice() -----------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------	
 
 void DFPlay::manageDevice(void) {
@@ -412,48 +414,59 @@ void DFPlay::manageDevice(void) {
 
     // RULE B1 - Skip to next track
     if ((this->dState.skip) && (this->cState.playState == PLAYING)) {
-		if ( ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA))) {
-    		#ifdef DFPLAY_DEBUG_SERIAL
-    			DFPLAY_DEBUG_SERIAL.println("Skip");
-    		#endif
-        	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x01, 0x00, 0x00, 0x00, 0xFE, 0xFA, 0xEF };
-        	submitRequest(request,SUBMIT_INTERVAL);
-        	this->cState.trackCount++;
-        	this->cState.idleMillis = millis();
-			this->cState.changePending = false;
-        	if (this->cState.trackCount >= this->cState.tracks) { // if last track was skipped
-         		this->cState.trackCount = 0;
- 		        if ( !this->dState.repeat) {
- 		            this->dState.playState = IDLE; // no repeat, so signal a hard stop
-  		            // DFPlayer requires extra time to process when stopping after the last track in a folder or on media
- 		            this->cState.noSubmitsTil = millis() + 100; // see note 3 at the bottom of this file for more detail
- 		        }
-        	}
-		} else { // playing an individual track
+		if ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA)) {
+			// if playing last track and not repeating, stop
+			if ((this->cState.trackCount == (cState.tracks -1)) &&  ( !this->dState.repeat)) {
+				this->dState.playState = IDLE;
+				this->cState.idleMillis = millis();
+ 		        this->cState.noSubmitsTil = millis() + 100; // see note 3 at the bottom of this file for more detail
+			} else { // otherwise, skip to the next track
+				#ifdef DFPLAY_DEBUG_SERIAL
+					DFPLAY_DEBUG_SERIAL.println("Skip");
+				#endif
+				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x01, 0x00, 0x00, 0x00, 0xFE, 0xFA, 0xEF };
+				submitRequest(request,SUBMIT_INTERVAL);
+				// adjust trackCount
+				this->cState.trackCount++;
+				if (this->cState.trackCount >= this->cState.tracks) {
+					this->cState.trackCount = 0;
+				}
+			}
+ 		} else { // playing an individual track
 		    this->dState.playState = IDLE; // signal a hard stop (If a playlist is used, going IDLE will trigger the next play command)
+			this->cState.idleMillis = millis();
  		}
     	this->dState.skip = false;
 		return;
     }
-    // RULE B1 - Back to the prior track
+    // RULE B2 - Back to the prior track
     if ((this->dState.back) && (this->cState.playState == PLAYING)) {
-		if ( ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA))) {
-			if (this->cState.trackCount > 0) {
+		if ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA)) {
+			// if playing first track and not repeating, stop
+			if ((this->cState.trackCount == 0) &&  ( !this->dState.repeat)) {
+				this->dState.playState = IDLE;
+				this->cState.idleMillis = millis();
+			} else { // otherwise, skip to the prior track
 				#ifdef DFPLAY_DEBUG_SERIAL
 					DFPLAY_DEBUG_SERIAL.println("Back");
 				#endif
 				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x02, 0x00, 0x00, 0x00, 0xFE, 0xF9, 0xEF };
 				submitRequest(request,SUBMIT_INTERVAL);
+				// adjust trackCount
+				if (this->cState.trackCount == 0) {
+					this->cState.trackCount = (this->cState.tracks);
+				} 
 				this->cState.trackCount--;
-				this->cState.idleMillis = millis();
-				this->cState.changePending = false;
 			}
+ 		} else { // playing an individual track
+		    this->dState.playState = IDLE; // signal a hard stop (If a playlist is used, going IDLE will trigger the next play command)
+			this->cState.idleMillis = millis();
 		}
     	this->dState.back = false;
 		return;
     }
       
-    // RULE B2 - Make sure DFPlayer is stopped when IDLE is the desired playState
+    // RULE B3 - Make sure DFPlayer is stopped when IDLE is the desired playState
 	if ((this->dState.playState == IDLE) && (this->cState.playState != IDLE)) {
 		#ifdef DFPLAY_DEBUG_SERIAL
 			DFPLAY_DEBUG_SERIAL.println("Stop");
@@ -466,7 +479,7 @@ void DFPlay::manageDevice(void) {
 		return;
     }
 
-   // RULE B3 - PAUSE when PLAYING and desired state is PAUSED
+   // RULE B4 - PAUSE when PLAYING and desired state is PAUSED
     if ((this->dState.playState == PAUSED) && (this->cState.playState == PLAYING)) {
         #ifdef DFPLAY_DEBUG_SERIAL
             DFPLAY_DEBUG_SERIAL.println("Pause");
@@ -478,7 +491,7 @@ void DFPlay::manageDevice(void) {
  return;
     }
 
-    // RULE B4 - Assure DFPlayer volume is set to the desired volume
+    // RULE B5 - Assure DFPlayer volume is set to the desired volume
 	uint8_t desiredVolume = 0; // this setting will prevail when muted
     if ( !this->dState.muted) {
         desiredVolume = max(min((this->dState.volume + this->dState.selection.volAdj), 30), 0);
@@ -495,7 +508,7 @@ void DFPlay::manageDevice(void) {
 		return;
 	}
 
-    // RULE B5 - Assure DFPlayer equalizer is set to the desired state
+    // RULE B6 - Assure DFPlayer equalizer is set to the desired state
     uint8_t desiredEqualizer = 0;
     if (this->dState.selection.equalizer == 0) desiredEqualizer = this->dState.equalizer;
 	else desiredEqualizer = this->dState.selection.equalizer;
@@ -511,7 +524,7 @@ void DFPlay::manageDevice(void) {
         return;
     }
 
-    // RULE B6 - Resume when DFPlayer is PAUSED and desired state is PLAYING
+    // RULE B7 - Resume when DFPlayer is PAUSED and desired state is PLAYING
     if ((this->cState.playState == PAUSED) && (this->dState.playState == PLAYING)) {
         #ifdef DFPLAY_DEBUG_SERIAL
             DFPLAY_DEBUG_SERIAL.println("Resume");
@@ -697,11 +710,13 @@ void DFPlay::manageDevice(void) {
     
 	return;
 } // end of manageDevice()
-    
-/* ================================================================================================ submitRequest()
-		Write Request Frames to DFPlayer
-   =============================================================================================================
-*/
+
+
+// ----------------------------------------------------------------------------------------------------------------		
+// ------------------------------------------------ PRIVATE METHODS -----------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------	
+   
+// Submit PLAY requests to the DFPlayer
 void DFPlay::submitRequest(uint8_t request[], uint16_t dlay, uint8_t ptype) {
 	this->cState.playState = PLAYING;
 	this->cState.playType = ptype;
@@ -713,6 +728,7 @@ void DFPlay::submitRequest(uint8_t request[], uint16_t dlay, uint8_t ptype) {
 	}
 	submitRequest(request, dlay);
 }
+// Submit OTHER requests to DFPlayer
 void DFPlay::submitRequest(uint8_t request[], uint16_t dlay) {
     uint8_t requestLength = request[LEN] + 4;
     #ifdef DFPLAY_DEBUG_SERIAL

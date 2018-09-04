@@ -129,9 +129,6 @@ class DFPlay {
         bool isSleeping(void);
 		bool playFailure(void);
         void manageDevice(void);
-        uint32_t getTrackCount()
-        {
-          return cState.trackCount;
-        }
+        uint32_t getTrackCount(void);
 };
 #endif
