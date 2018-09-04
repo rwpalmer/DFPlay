@@ -437,6 +437,7 @@ void DFPlay::manageDevice(void) {
 			this->cState.idleMillis = millis();
  		}
     	this->dState.skip = false;
+		this->cState.changePending = false;
 		return;
     }
     // RULE B2 - Back to the prior track
@@ -463,6 +464,7 @@ void DFPlay::manageDevice(void) {
 			this->cState.idleMillis = millis();
 		}
     	this->dState.back = false;
+		this->cState.changePending = false;
 		return;
     }
       
