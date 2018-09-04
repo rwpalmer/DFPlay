@@ -426,6 +426,7 @@ void DFPlay::manageDevice(void) {
 				#endif
 				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x01, 0x00, 0x00, 0x00, 0xFE, 0xFA, 0xEF };
 				submitRequest(request,SUBMIT_INTERVAL);
+				this->cState.changePending = false;
 				// adjust trackCount
 				this->cState.trackCount++;
 				if (this->cState.trackCount >= this->cState.tracks) {
@@ -437,7 +438,6 @@ void DFPlay::manageDevice(void) {
 			this->cState.idleMillis = millis();
  		}
     	this->dState.skip = false;
-		this->cState.changePending = false;
 		return;
     }
     // RULE B2 - Back to the prior track
@@ -453,6 +453,7 @@ void DFPlay::manageDevice(void) {
 				#endif
 				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x02, 0x00, 0x00, 0x00, 0xFE, 0xF9, 0xEF };
 				submitRequest(request,SUBMIT_INTERVAL);
+				this->cState.changePending = false;
 				// adjust trackCount
 				if (this->cState.trackCount == 0) {
 					this->cState.trackCount = (this->cState.tracks);
@@ -464,7 +465,6 @@ void DFPlay::manageDevice(void) {
 			this->cState.idleMillis = millis();
 		}
     	this->dState.back = false;
-		this->cState.changePending = false;
 		return;
     }
       
