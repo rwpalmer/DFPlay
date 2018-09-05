@@ -105,6 +105,7 @@ class DFPlay {
     public:
         void begin(Stream& s);
         void play(Selection&);
+		void play(uint8_t m, uint8_t f=0, uint16_t t=0, int8_t  v=0, uint8_t e=0);
         void pause(void);
         void resume(void);
         void repeat(void);

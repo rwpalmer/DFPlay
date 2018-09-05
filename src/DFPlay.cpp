@@ -59,6 +59,11 @@ void DFPlay::play(Selection& sel) {
 	this->cState.playFailure = false;
     return;
 }
+void DFPlay::play(uint8_t m, uint8_t f, uint16_t t, int8_t  v, uint8_t e) {
+	Selection s = {m,f,t,v,e};
+	this->play(s);
+}
+
 void DFPlay::pause(void)  {
     if (this->isPlaying()) {
         this->dState.playState = PAUSED;
