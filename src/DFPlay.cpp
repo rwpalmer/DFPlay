@@ -189,8 +189,13 @@ void DFPlay::manageDevice(void) {
         	#ifdef DFPLAY_DEBUG_SERIAL
               DFPLAY_DEBUG_SERIAL.print("Response:");
               for (int i = 0; i<10; i++) {
-                DFPLAY_DEBUG_SERIAL.print(" ");
-                DFPLAY_DEBUG_SERIAL.print(frame[i],HEX);
+                #ifdef SPARK
+                  DFPLAY_DEBUG_SERIAL.printf(" %02x", frame[i]);
+                #else
+                  DFPLAY_DEBUG_SERIAL.print(" ");
+                  DFPLAY_DEBUG_SERIAL.print(frame[i]>>4,HEX);
+                  DFPLAY_DEBUG_SERIAL.print(frame[i]&0x0F,HEX);
+                #endif
               }
               DFPLAY_DEBUG_SERIAL.println();
         	#endif
@@ -735,8 +740,13 @@ void DFPlay::submitRequest(uint8_t request[], uint16_t dlay) {
     #ifdef DFPLAY_DEBUG_SERIAL
         DFPLAY_DEBUG_SERIAL.print(" Request:");
         for (int i = 0; i<requestLength; i++) {
-            DFPLAY_DEBUG_SERIAL.print(" ");
-            DFPLAY_DEBUG_SERIAL.print(request[i],HEX);
+            #ifdef SPARK
+              DFPLAY_DEBUG_SERIAL.printf(" %02x", request[i]);
+            #else
+              DFPLAY_DEBUG_SERIAL.print(" ");
+              DFPLAY_DEBUG_SERIAL.print(request[i]>>4,HEX);
+              DFPLAY_DEBUG_SERIAL.print(request[i]&0x0F,HEX);
+            #endif
         }
         DFPLAY_DEBUG_SERIAL.println();
     #endif
