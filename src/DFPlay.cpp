@@ -7,7 +7,7 @@
 */    
 #include "DFPlay.h"
 
-// #define DFPLAY_DEBUG_SERIAL Serial // <-- uncomment this #define statement to enable logging to a Serial console. 
+#define DFPLAY_DEBUG_SERIAL Serial // <-- uncomment this #define statement to enable logging to a Serial console. 
 
 
 // ----------------------------------------------------------------------------------------------------------------		
@@ -34,16 +34,17 @@ void DFPlay::begin(Stream& s) {    //  initialize class members and query DFPlay
 	this->cState.playFailure = false;
     this->cState.usbAttached = false;
     this->cState.sdAttached = false;
-    this->cState.noSubmitsTil = 0;
     this->cState.tracks = 0;
     this->cState.trackCount = 0;
     this->cState.sleeping = false;
     this->cState.changePending = true;
 	this->cState.idleMillis = 0;
 	this->cState.firstEot = true;
-    #ifdef DFPLAY_DEBUG_SERIAL
+    #if defined(DFPLAY_DEBUG_SERIAL) && defined(SPARK) 
 		this->cState.noSubmitsTil = millis() + 3000; // allow time for the Serial connection to be established before initializing the DFPlayer
-    #endif
+	#else 
+		this->cState.noSubmitsTil = 0; 
+	#endif
 	return;
 }
 void DFPlay::play(Selection& sel) {
@@ -58,6 +59,11 @@ void DFPlay::play(Selection& sel) {
 	this->cState.playFailure = false;
     return;
 }
+void DFPlay::play(uint8_t m, uint8_t f, uint16_t t, int8_t  v, uint8_t e) {
+	Selection s = {m,f,t,v,e};
+	this->play(s);
+}
+
 void DFPlay::pause(void)  {
     if (this->isPlaying()) {
         this->dState.playState = PAUSED;
@@ -142,19 +148,20 @@ void DFPlay::unmute(void) {
     if (this->isPlaying()) this->cState.changePending = true;
     return;
 }
-void DFPlay::repeat (void)            	{ this->dState.repeat = true; return; }
-void DFPlay::norepeat(void)			{ this->dState.repeat = false; return; }
-bool DFPlay::isMuted(void)      		{ return this->dState.muted; }
-bool DFPlay::isIdle(void) 				{ if (this->dState.playState == IDLE) 		return true;    else return false; }
-bool DFPlay::isPlaying(void)			{ if (this->dState.playState == PLAYING)	return true;  	else return false; }
-bool DFPlay::isPaused(void) 			{ if (this->dState.playState == PAUSED) 	return true;    else return false; }
-bool DFPlay::isRepeating(void)       { if (this->dState.repeat) return true; else return false; }
-bool DFPlay::isSleeping(void)         { return this->cState.sleeping; }
+void DFPlay::repeat (void)            		{ this->dState.repeat = true; return; }
+void DFPlay::norepeat(void)				{ this->dState.repeat = false; return; }
+bool DFPlay::isMuted(void)      			{ return this->dState.muted; }
+bool DFPlay::isIdle(void) 					{ if (this->dState.playState == IDLE) 		return true;    else return false; }
+bool DFPlay::isPlaying(void)				{ if (this->dState.playState == PLAYING)	return true;  	else return false; }
+bool DFPlay::isPaused(void) 				{ if (this->dState.playState == PAUSED) 	return true;    else return false; }
+bool DFPlay::isRepeating(void)       	{ if (this->dState.repeat) return true; else return false; }
+bool DFPlay::isSleeping(void)         	{ return this->cState.sleeping; }
 bool DFPlay::playFailure(void)			{ return this->cState.playFailure; }
+uint32_t DFPlay::getTrackCount(void)	{ return cState.trackCount; }
 
 
 // ----------------------------------------------------------------------------------------------------------------		
-// ------------------------------------------------ PRIVATE METHODS -----------------------------------------------
+// ------------------------------------------------ manageDevice() -----------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------	
 
 void DFPlay::manageDevice(void) {
@@ -180,8 +187,12 @@ void DFPlay::manageDevice(void) {
             	}
         	}
         	#ifdef DFPLAY_DEBUG_SERIAL
-        	    DFPLAY_DEBUG_SERIAL.printf("Response: %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\n\r", 
-        	    frame[0],frame[1],frame[2],frame[3],frame[4],frame[5],frame[6],frame[7],frame[8],frame[9]);
+              DFPLAY_DEBUG_SERIAL.print("Response:");
+              for (int i = 0; i<10; i++) {
+                DFPLAY_DEBUG_SERIAL.print(" ");
+                DFPLAY_DEBUG_SERIAL.print(frame[i],HEX);
+              }
+              DFPLAY_DEBUG_SERIAL.println();
         	#endif
         	if (frameError) { 
         	    // HANDLE FRAMING ERRORS ... RESYNC TO NEXT POSSIBLE FIRST BYTE CHARACTER
@@ -402,8 +413,7 @@ void DFPlay::manageDevice(void) {
     }
 	#ifdef DFPLAY_DEBUG_SERIAL
 		if (this->dState.newSelection == true) {
-			DFPLAY_DEBUG_SERIAL.printf("\nSelection: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
-			this->dState.selection.track, this->dState.selection.volAdj, this->dState.selection.equalizer);
+			debug_print_state("\nSelection",false);
 		}
 	#endif
 
@@ -412,49 +422,61 @@ void DFPlay::manageDevice(void) {
 
     // RULE B1 - Skip to next track
     if ((this->dState.skip) && (this->cState.playState == PLAYING)) {
-		if ( ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA))) {
-    		#ifdef DFPLAY_DEBUG_SERIAL
-    			DFPLAY_DEBUG_SERIAL.println("Skip");
-    		#endif
-        	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x01, 0x00, 0x00, 0x00, 0xFE, 0xFA, 0xEF };
-        	submitRequest(request,SUBMIT_INTERVAL);
-        	this->cState.trackCount++;
-        	this->cState.idleMillis = millis();
-			this->cState.changePending = false;
-        	if (this->cState.trackCount >= this->cState.tracks) { // if last track was skipped
-         		this->cState.trackCount = 0;
- 		        if ( !this->dState.repeat) {
- 		            this->dState.playState = IDLE; // no repeat, so signal a hard stop
-  		            // DFPlayer requires extra time to process when stopping after the last track in a folder or on media
- 		            this->cState.noSubmitsTil = millis() + 100; // see note 3 at the bottom of this file for more detail
- 		            this->cState.changePending = true;
- 		        }
-        	}
-		} else { // playing an individual track
+		if ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA)) {
+			// if playing last track and not repeating, stop
+			if ((this->cState.trackCount == (cState.tracks -1)) &&  ( !this->dState.repeat)) {
+				this->dState.playState = IDLE;
+				this->cState.idleMillis = millis();
+ 		        this->cState.noSubmitsTil = millis() + 100; // see note 3 at the bottom of this file for more detail
+			} else { // otherwise, skip to the next track
+				#ifdef DFPLAY_DEBUG_SERIAL
+					DFPLAY_DEBUG_SERIAL.println("Skip");
+				#endif
+				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x01, 0x00, 0x00, 0x00, 0xFE, 0xFA, 0xEF };
+				submitRequest(request,SUBMIT_INTERVAL);
+				this->cState.changePending = false;
+				// adjust trackCount
+				this->cState.trackCount++;
+				if (this->cState.trackCount >= this->cState.tracks) {
+					this->cState.trackCount = 0;
+				}
+			}
+ 		} else { // playing an individual track
 		    this->dState.playState = IDLE; // signal a hard stop (If a playlist is used, going IDLE will trigger the next play command)
+			this->cState.idleMillis = millis();
  		}
     	this->dState.skip = false;
 		return;
     }
-    // RULE B1 - Back to the prior track
+    // RULE B2 - Back to the prior track
     if ((this->dState.back) && (this->cState.playState == PLAYING)) {
-		if ( ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA))) {
-			if (this->cState.trackCount > 0) {
+		if ((this->cState.playType == FOLDER) || (this->cState.playType == MEDIA)) {
+			// if playing first track and not repeating, stop
+			if ((this->cState.trackCount == 0) &&  ( !this->dState.repeat)) {
+				this->dState.playState = IDLE;
+				this->cState.idleMillis = millis();
+			} else { // otherwise, skip to the prior track
 				#ifdef DFPLAY_DEBUG_SERIAL
 					DFPLAY_DEBUG_SERIAL.println("Back");
 				#endif
 				uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x02, 0x00, 0x00, 0x00, 0xFE, 0xF9, 0xEF };
 				submitRequest(request,SUBMIT_INTERVAL);
-				this->cState.trackCount--;
-				this->cState.idleMillis = millis();
 				this->cState.changePending = false;
+				// adjust trackCount
+				if (this->cState.trackCount == 0) {
+					this->cState.trackCount = (this->cState.tracks);
+				} 
+				this->cState.trackCount--;
 			}
+ 		} else { // playing an individual track
+		    this->dState.playState = IDLE; // signal a hard stop (If a playlist is used, going IDLE will trigger the next play command)
+			this->cState.idleMillis = millis();
 		}
     	this->dState.back = false;
 		return;
     }
       
-    // RULE B2 - Make sure DFPlayer is stopped when IDLE is the desired playState
+    // RULE B3 - Make sure DFPlayer is stopped when IDLE is the desired playState
 	if ((this->dState.playState == IDLE) && (this->cState.playState != IDLE)) {
 		#ifdef DFPLAY_DEBUG_SERIAL
 			DFPLAY_DEBUG_SERIAL.println("Stop");
@@ -467,7 +489,7 @@ void DFPlay::manageDevice(void) {
 		return;
     }
 
-   // RULE B3 - PAUSE when PLAYING and desired state is PAUSED
+   // RULE B4 - PAUSE when PLAYING and desired state is PAUSED
     if ((this->dState.playState == PAUSED) && (this->cState.playState == PLAYING)) {
         #ifdef DFPLAY_DEBUG_SERIAL
             DFPLAY_DEBUG_SERIAL.println("Pause");
@@ -479,7 +501,7 @@ void DFPlay::manageDevice(void) {
  return;
     }
 
-    // RULE B4 - Assure DFPlayer volume is set to the desired volume
+    // RULE B5 - Assure DFPlayer volume is set to the desired volume
 	uint8_t desiredVolume = 0; // this setting will prevail when muted
     if ( !this->dState.muted) {
         desiredVolume = max(min((this->dState.volume + this->dState.selection.volAdj), 30), 0);
@@ -496,7 +518,7 @@ void DFPlay::manageDevice(void) {
 		return;
 	}
 
-    // RULE B5 - Assure DFPlayer equalizer is set to the desired state
+    // RULE B6 - Assure DFPlayer equalizer is set to the desired state
     uint8_t desiredEqualizer = 0;
     if (this->dState.selection.equalizer == 0) desiredEqualizer = this->dState.equalizer;
 	else desiredEqualizer = this->dState.selection.equalizer;
@@ -512,7 +534,7 @@ void DFPlay::manageDevice(void) {
         return;
     }
 
-    // RULE B6 - Resume when DFPlayer is PAUSED and desired state is PLAYING
+    // RULE B7 - Resume when DFPlayer is PAUSED and desired state is PLAYING
     if ((this->cState.playState == PAUSED) && (this->dState.playState == PLAYING)) {
         #ifdef DFPLAY_DEBUG_SERIAL
             DFPLAY_DEBUG_SERIAL.println("Resume");
@@ -572,9 +594,7 @@ void DFPlay::manageDevice(void) {
     		} else if (cState.tracks > 0) {
     		// Issue the DFPlayer command to play the media
         		#ifdef DFPLAY_DEBUG_SERIAL
-        			DFPLAY_DEBUG_SERIAL.printf("Play Media: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
-        			this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
-        			this->dState.selection.volAdj, this->dState.selection.equalizer, this->cState.tracks);
+        			debug_print_state("Play Media",true);
         		#endif
         		uint16_t cs = 0xFEFB - (0x11 + this->dState.selection.media); // compute checksum
         		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x11, 0x00, 0x00,  this->dState.selection.media, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
@@ -596,8 +616,7 @@ void DFPlay::manageDevice(void) {
     	    }
 	    } else { // dState.selection.track is not 0, so we play a track based on a track number.
     		#ifdef DFPLAY_DEBUG_SERIAL
-    			DFPLAY_DEBUG_SERIAL.printf("Play Track#: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
-    			this->dState.selection.track, this->dState.selection.volAdj, this->dState.selection.equalizer);
+    			debug_print_state("Play Track#",false);
     		#endif
     		uint16_t cs = 0xFEFB - (0x08 + (this->dState.selection.track / 256) + (this->dState.selection.track % 256)); // compute checksum
     		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x08, 0x00, (uint8_t)(this->dState.selection.track / 256), 
@@ -621,9 +640,7 @@ void DFPlay::manageDevice(void) {
 		} else if (cState.tracks > 0) {
         	// Issue the DFPlayer command to play the folder
         	#ifdef DFPLAY_DEBUG_SERIAL
-        		DFPLAY_DEBUG_SERIAL.printf("Play Folder: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", 
-        		this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
-        		this->dState.selection.volAdj, this->dState.selection.equalizer, this->cState.tracks);
+        		debug_print_state("Play Folder",true);
         	#endif
         	uint16_t cs = 0xFEFB - (0x17 + this->dState.selection.folder); // compute checksum
         	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x17, 0x00, 0x00,  this->dState.selection.folder, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
@@ -648,8 +665,7 @@ void DFPlay::manageDevice(void) {
 	// RULE C6 - Play an individual track track from folders 01 to 15 ... Track must have a 4-digit file name prefix
 	if (this->dState.selection.folder < 16) {
 		#ifdef DFPLAY_DEBUG_SERIAL
-			DFPLAY_DEBUG_SERIAL.printf("Play 4-digit prefix: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
-			this->dState.selection.track, this->dState.selection.volAdj, this->dState.selection.equalizer);
+			debug_print_state("Play 4-digit prefix",false);
 		#endif
 		uint16_t dbyte = ((this->dState.selection.folder * 4096) + this->dState.selection.track);
 		uint16_t cs = 0xFEFB - (0x14 + (dbyte / 256) + (dbyte % 256)); // compute checksum
@@ -661,8 +677,7 @@ void DFPlay::manageDevice(void) {
 	// RULE C7 - Play an individual track track from folders 16 to 99 ... Track must have a 3-digit file name prefix
 	if ((this->dState.selection.folder > 15) && (this->dState.selection.folder < 100)) {
     	#ifdef DFPLAY_DEBUG_SERIAL
-    		DFPLAY_DEBUG_SERIAL.printf("Play 3-digit prefix: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
-    		this->dState.selection.track, this->dState.selection.volAdj, this->dState.selection.equalizer);
+    		debug_print_state("Play 3-digit prefix",false);
     	#endif
     	uint16_t cs = 0xFEFB - (0x0F + this->dState.selection.folder + this->dState.selection.track); // compute checksum
     	uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x0F, 0x00, this->dState.selection.folder, (uint8_t)this->dState.selection.track, (uint8_t)(cs / 256), (uint8_t)(cs % 256), 0xEF};
@@ -673,8 +688,7 @@ void DFPlay::manageDevice(void) {
 	// RULE C8 - Play a track from the root folder ... Track must have a 4-digit file name prefix
     if (this->dState.selection.folder == 100) {
 		#ifdef DFPLAY_DEBUG_SERIAL
-			DFPLAY_DEBUG_SERIAL.printf("Play root: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
-			this->dState.selection.track, this->dState.selection.volAdj, this->dState.selection.equalizer);
+			debug_print_state("Play root",false);
 		#endif
 		uint16_t cs = 0xFEFB - (0x03 + (this->dState.selection.track / 256) + (this->dState.selection.track % 256)); // compute checksum
 		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x03, 0x00, (uint8_t)(this->dState.selection.track / 256), 
@@ -686,8 +700,7 @@ void DFPlay::manageDevice(void) {
 	// RULE C9 - Play a track from the MP3 folder ... Track must have a 4-digit file name prefix
     if (this->dState.selection.folder == 101) {
 		#ifdef DFPLAY_DEBUG_SERIAL
-			DFPLAY_DEBUG_SERIAL.printf("Play MP3: {%d,%d,%d,%d,%d}\n\r", this->dState.selection.media, this->dState.selection.folder, 
-			this->dState.selection.track, this->dState.selection.volAdj, this->dState.selection.equalizer);
+			debug_print_state("Play MP3",false);
 		#endif
 		uint16_t cs = 0xFEFB - (0x12 + (this->dState.selection.track / 256) + (this->dState.selection.track % 256)); // compute checksum
 		uint8_t request[] = { 0x7E, 0xFF, 0x06, 0x12, 0x00, (uint8_t)(this->dState.selection.track / 256), 
@@ -698,11 +711,13 @@ void DFPlay::manageDevice(void) {
     
 	return;
 } // end of manageDevice()
-    
-/* ================================================================================================ submitRequest()
-		Write Request Frames to DFPlayer
-   =============================================================================================================
-*/
+
+
+// ----------------------------------------------------------------------------------------------------------------		
+// ------------------------------------------------ PRIVATE METHODS -----------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------	
+   
+// Submit PLAY requests to the DFPlayer
 void DFPlay::submitRequest(uint8_t request[], uint16_t dlay, uint8_t ptype) {
 	this->cState.playState = PLAYING;
 	this->cState.playType = ptype;
@@ -714,17 +729,61 @@ void DFPlay::submitRequest(uint8_t request[], uint16_t dlay, uint8_t ptype) {
 	}
 	submitRequest(request, dlay);
 }
+// Submit OTHER requests to DFPlayer
 void DFPlay::submitRequest(uint8_t request[], uint16_t dlay) {
     uint8_t requestLength = request[LEN] + 4;
     #ifdef DFPLAY_DEBUG_SERIAL
         DFPLAY_DEBUG_SERIAL.print(" Request:");
         for (int i = 0; i<requestLength; i++) {
-            DFPLAY_DEBUG_SERIAL.printf(" %02x", request[i]);
+            DFPLAY_DEBUG_SERIAL.print(" ");
+            DFPLAY_DEBUG_SERIAL.print(request[i],HEX);
         }
         DFPLAY_DEBUG_SERIAL.println();
     #endif
     stream->write(request,requestLength);
     this->cState.noSubmitsTil = millis() + dlay;
+}
+
+void DFPlay::debug_print_state(const char *commandstr, bool showtracks)
+{
+#ifdef DFPLAY_DEBUG_SERIAL
+#ifdef SPARK
+  if (showtracks)
+  {
+    DFPLAY_DEBUG_SERIAL.printf("%s: {%d,%d,%d,%d,%d} ... %d Tracks\n\r", commandstr,
+              this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
+              this->dState.selection.volAdj, this->dState.selection.equalizer, this->cState.tracks);
+  }
+  else
+  {
+    DFPLAY_DEBUG_SERIAL.printf("%s: {%d,%d,%d,%d,%d}\n\r", commandstr, 
+            this->dState.selection.media, this->dState.selection.folder, this->dState.selection.track, 
+            this->dState.selection.volAdj, this->dState.selection.equalizer);
+  }
+#else
+  DFPLAY_DEBUG_SERIAL.print(commandstr);
+  DFPLAY_DEBUG_SERIAL.print(F(": {"));
+  DFPLAY_DEBUG_SERIAL.print(this->dState.selection.media);
+  DFPLAY_DEBUG_SERIAL.print(F(","));
+  DFPLAY_DEBUG_SERIAL.print(this->dState.selection.folder);
+  DFPLAY_DEBUG_SERIAL.print(F(","));
+  DFPLAY_DEBUG_SERIAL.print(this->dState.selection.folder);
+  DFPLAY_DEBUG_SERIAL.print(F(","));
+  DFPLAY_DEBUG_SERIAL.print(this->dState.selection.track);
+  DFPLAY_DEBUG_SERIAL.print(F(","));
+  DFPLAY_DEBUG_SERIAL.print(this->dState.selection.volAdj);
+  DFPLAY_DEBUG_SERIAL.print(F(","));
+  DFPLAY_DEBUG_SERIAL.print(this->dState.selection.equalizer);
+  DFPLAY_DEBUG_SERIAL.print(F("}"));
+  if (showtracks)
+  {
+    DFPLAY_DEBUG_SERIAL.print(F(" ... "));
+    DFPLAY_DEBUG_SERIAL.print(this->cState.tracks);
+    DFPLAY_DEBUG_SERIAL.print(F(" Tracks"));
+  }
+  DFPLAY_DEBUG_SERIAL.println();
+#endif
+#endif
 }
 
     

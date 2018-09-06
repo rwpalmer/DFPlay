@@ -100,11 +100,13 @@ class DFPlay {
 // PRIVATE METHODS
         void submitRequest(uint8_t[] ,uint16_t);
         void submitRequest(uint8_t[] ,uint16_t, uint8_t);
+        void debug_print_state(const char *commandstr, bool showtracks);
         
 // PUBLIC METHODS        
     public:
         void begin(Stream& s);
         void play(Selection&);
+		void play(uint8_t m, uint8_t f=0, uint16_t t=0, int8_t  v=0, uint8_t e=0);
         void pause(void);
         void resume(void);
         void repeat(void);
@@ -129,9 +131,6 @@ class DFPlay {
         bool isSleeping(void);
 		bool playFailure(void);
         void manageDevice(void);
-        uint32_t getTrackCount()
-        {
-          return cState.trackCount;
-        }
+        uint32_t getTrackCount(void);
 };
 #endif
