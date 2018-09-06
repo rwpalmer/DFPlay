@@ -1,5 +1,5 @@
 # ***DFPlay***
- ***An Enhanced Library for the DFPlayer***
+ ***An Enhanced Library for DFPlayer / FN-M16P***
 
 ## *Overview*
 DFPlayers are inexpensive and they have a serial interface. This makes them a useful resource for IOT projects.
