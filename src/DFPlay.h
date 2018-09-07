@@ -100,6 +100,7 @@ class DFPlay {
 // PRIVATE METHODS
         void submitRequest(uint8_t[] ,uint16_t);
         void submitRequest(uint8_t[] ,uint16_t, uint8_t);
+        void debug_print_state(const char *commandstr, bool showtracks);
         
 // PUBLIC METHODS        
     public:
