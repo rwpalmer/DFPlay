@@ -1,5 +1,5 @@
 # ***DFPlay***
- ***An Enhanced Library for DFPlayer / FN-M16P***
+ ***Enhanced Library for DFPlayer / FN-M16P***
 
 ## *Overview*
 DFPlayers are inexpensive and they have a serial interface. This makes them a useful resource for IOT projects.
@@ -72,14 +72,19 @@ In this case, the selected tracks are hard-coded, so you will need to modify the
 [documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/DoorAlarm.md)
 
 ## *Project Status*
-* Version 0.0.9 has been released for field testing (Particle Platform only) 
-* Version 0.0.10 is a work in progress ...
-	- Arduino support has been added
-	- back() method has been added
-	- getTrackCount method has been added
-	- play() has been overloaded with an option that creates a selection and plays it in one step. 
-* Release 1 planned for September 30, 2018
----
+* v 0.0.9 (prerelease) was released for Particle field testing
+* v 0.0.10
+	- includes some enhancements and fixes
+	- was released as a (one-time) Arduino port 
+* v 1.0.0 is a work in progress ...  
+	* will include additional enhancements and fixes
+	* Particle release planned  for September 30, 2018
+* v 1.1.0 is planned for early 2019
+	* Plan to support FN-M10P ( DFPlayer-Micro )
+	* Plan to support FN-S10P ( w/ flash memory & secondary amp)
+
+The author does not plan to release additional Arduino versions, but would welcome the opportunity to work with anyone who is so inclined. 
+
 Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
 
 > Written with [StackEdit](https://stackedit.io/).
