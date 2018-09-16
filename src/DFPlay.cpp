@@ -1,7 +1,7 @@
 /*
     Project:    DFPlay library
     File:       DFPlay.cpp 
-    Version:    0.0.10 - September 2018
+    Version:    1.0.0 - September 2018
     Copyright:  2018, Rodney Palmer (rwpalmeribm@gmail.com)
     License:    GNU GPLv3   
 */    
@@ -158,6 +158,7 @@ bool DFPlay::isRepeating(void)       	{ if (this->dState.repeat) return true; el
 bool DFPlay::isSleeping(void)         	{ return this->cState.sleeping; }
 bool DFPlay::playFailure(void)			{ return this->cState.playFailure; }
 uint32_t DFPlay::getTrackCount(void)	{ return cState.trackCount; }
+uint32_t DFPlay::getTracks(void)		{ return cState.tracks; }
 
 
 // ----------------------------------------------------------------------------------------------------------------		
