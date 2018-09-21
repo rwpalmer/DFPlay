@@ -8,6 +8,8 @@ PlayList.ino creates an empty vector and allows you to populate the vector by en
 
 The DFPlayer will start playing after you enter the first selection. Additional selections may then be added while the DFPlayer is playing. Each new selection will be added to the end of the playlist, and each will play in turn. When the end of the playlist is reached, Playlist.ino will play it again. 
 
+Selections that fail to play are automatically deleted from the playlist. The associated code demonstrates how the DFPlay library's playFailure() method can be used.  
+
 ### Prerequisites:
 USB or SD Media with file and folder names that conform to DFPlayer requirements as documented in the [***DFPlay QuickStart Guide***](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub).
 
@@ -39,17 +41,16 @@ The following selections are presented as you might see them initialized in code
 When volAdj and equalizer are zero, DFPlay uses the default volume level and equalizer. 
 
 ### Entering Selections into the Particle Function:
-The Particle function used in this example accepts an initialization string with the following caveats:
-* braces are optional
-* trailing members with a zero value can be omitted
+The Particle function used in this example code accepts initialization strings as they are presented above.
+The Braces "{ }"  and any trailing members with a zero value are optional.
 
-**Therefore:**
-{1,0,0,0,0} can be entered as: 1
-{2,0,0,0,0} can be entered as: 2
-{2,21,0,0,0} can be entered as: 2,21
-{2,21,4,0,0} can be entered as: 2,21,4
-{2,21,4,+3,0} can be entered as: 2,21,4,3
-{2,21,4,-2,0} can be entered as: 2,21,4,-2
-{2,21,4,0,5} can be entered as: 2,21,4,0,5	
+**Therefore:** (referencing the same selection examples listed above ...)
+ - {1,0,0,0,0} can be entered as: 1  
+ - {2,0,0,0,0} can be entered as: 2   
+ - {2,21,0,0,0} can be entered as: 2,21 
+ - {2,21,4,0,0} can be entered as: 2,21,4 
+ - {2,21,4,+3,0} can be entered as: 2,21,4,3 
+ - {2,21,4,-2,0} can be   entered as: 2,21,4,-2 
+ - {2,21,4,0,5} can be entered as: 2,21,4,0,5
 
 > Written with [StackEdit](https://stackedit.io/).

@@ -21,7 +21,7 @@ When you bring up your device's Particle Console, the functions look like this:
 		
 * In the "Method" function:
 	* Type "play" (without quotes) and click the CALL button.
-	* Type other method names, clicking the CALL button after each.
+	* Type other method names that are listed below, clicking the CALL button after each.
 
 **Method Names:** (may be entered in upper, lower, or mixed case)
 * "***play***",  "***stop***"
@@ -39,4 +39,4 @@ While you play all of the tracks in a folder, or all of the tracks on the media,
 When LOGGING is enabled, this method can be used to display DFPlay's dialog with the DFPlayer on a Serial console. You will find information about how to enable  LOGGING in the [***DFPlay QuickStart Guide***](https://docs.google.com/document/d/e/2PACX-1vTxUyPOpk9RFMaxt53oPotWyAa5pTBVzpSS2L23bq2fGhUXK08vAFPSAWQ6gENLNFoum10IWmVFkJ7I/pub).
 
 
-> Written wit
+> Written with [StackEdit](https://stackedit.io/).
