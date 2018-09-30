@@ -72,11 +72,10 @@ In this case, the selected tracks are hard-coded, so you will need to modify the
 [documentation](https://github.com/rwpalmer/DFPlay/blob/master/doc/DoorAlarm.md)
 
 ## *Project Status*
-* v 0.0.9 (prerelease) was released for Particle field testing
 * v 0.0.10
 	- includes some enhancements and fixes
 	- was released as a (one-time) Arduino port 
-* v 1.0.0 is a work in progress ...  
+* v 1.0.0 released on   
 	* will include additional enhancements and fixes
 	* Particle release planned  for September 30, 2018
 * v 1.1.0 is planned for early 2019
@@ -88,3 +87,6 @@ The author does not plan to release additional Arduino versions, but would welco
 Please feel free to explore, comment, experiment, test ... whatever. Please post any issues to GitHub.  The author will also field any questions you may have. 
 
 > Written with [StackEdit](https://stackedit.io/).
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbMjUwOTUyMTY5XX0=
+-->
