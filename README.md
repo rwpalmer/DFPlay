@@ -75,8 +75,8 @@ In this case, the selected tracks are hard-coded, so you will need to modify the
 * v 0.0.10
 	- includes some enhancements and fixes
 	- was released as a (one-time) Arduino port 
-* v 1.0.0 released on 30 Sep 2018  
-	* Particle release planned  for September 30, 2018
+* v 1.0.0 released for Particle Devices on 30 Sep 2018  
+	* Supports FN-M16P (DFPlayer-Mini) 
 * v 1.1.0 is planned for early 2019
 	* Plan to support FN-M10P ( DFPlayer-Micro )
 	* Plan to support FN-S10P ( w/ flash memory & secondary amp)
@@ -87,5 +87,5 @@ Please feel free to explore, comment, experiment, test ... whatever. Please post
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzgxMTY2NjY3XX0=
+eyJoaXN0b3J5IjpbMzIxMzI2NTVdfQ==
 -->
