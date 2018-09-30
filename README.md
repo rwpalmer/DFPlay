@@ -78,8 +78,8 @@ In this case, the selected tracks are hard-coded, so you will need to modify the
 * v 1.0.0 released for Particle Devices on 30 Sep 2018  
 	* Supports FN-M16P ( DFPlayer-Mini ) 
 * v 1.1.0 is planned for early 2019
-	* Plan to support FN-M10P ( DFPlayer-Micro )
-	* Plan to support FN-S10P ( w/ flash memory & secondary amp)
+	* Plan to add support for FN-M10P ( DFPlayer-Micro )
+	* Plan to add support for FN-S10P ( w/ flash memory & secondary amp)
 
 The author does not plan to release additional Arduino versions, but would welcome the opportunity to work with anyone who is so inclined. 
 
@@ -87,5 +87,5 @@ Please feel free to explore, comment, experiment, test ... whatever. Please post
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzkwNTQzMzA5LDg2NDM4ODQyOV19
+eyJoaXN0b3J5IjpbLTY5MDI5MzQ3MSw4NjQzODg0MjldfQ==
 -->
