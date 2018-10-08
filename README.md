@@ -75,9 +75,9 @@ In this case, the selected tracks are hard-coded, so you will need to modify the
 * v 0.0.10
 	- Pre-release code ported for Arduino Devices
 	- Supports FN-M16P ( DFPlayer-Mini )
-* v 1.0.0 released for Particle Devices on 30 Sep 2018  
+* v 1.0.0 released for Particle Devices on 30 Nov 2018  
 	* Supports FN-M16P ( DFPlayer-Mini ) 
-* v 1.1.0 is planned for early 2019
+* v 1.1.0 is planned for 2019
 	* Plan to add support for FN-M10P ( DFPlayer-Micro )
 	* Plan to add support for FN-S10P ( w/ flash memory & secondary amp)
 
