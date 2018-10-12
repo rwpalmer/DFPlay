@@ -1,4 +1,4 @@
-
+ - List item
 
 ## DoorAlarm.ino
 
@@ -37,3 +37,6 @@ Please consult the [***DFPlay QuickStart Guide***](https://docs.google.com/docum
 Comments were inserted in the code to assist those who may wish to modify volume, the delay between notifications, or other settings.
 
 > Written with [StackEdit](https://stackedit.io/).
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTIyMDUxODQ0OF19
+-->
