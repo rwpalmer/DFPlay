@@ -55,7 +55,7 @@ ___
  - close all tabs
  - rename window
 
-Right-clicking on a "Tab" would allow me to 
+***Right-clicking on a "Tab" would allow me to*** 
 
  - open tab
  - open and load tab
@@ -68,5 +68,5 @@ Right-clicking on a "Tab" would allow me to
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2ODYzNDY3NCwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbLTk1MTUzODE5NiwxMTQ5ODIwNDA2XX0=
 -->
