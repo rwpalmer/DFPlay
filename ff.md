@@ -64,10 +64,12 @@ ___
  - duplicate tab
  - rename tab
  
-"copy/pasteI should also be able to drag and drop folders, sessions, windows, and tabs 
+"cut/copy/paste" and the ability to drag and drop folders, sessions, windows, and tabs should also be possible. 
+
 Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjEyNTc0MzMyMCwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbMTM1NDA2NTQ3MywyMTI1NzQzMzIwLDExND
+k4MjA0MDZdfQ==
 -->
