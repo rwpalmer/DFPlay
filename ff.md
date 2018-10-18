@@ -40,9 +40,11 @@ Right-clicking on "Browser Sessions" would allow me to
 
 Right-clicking on a "Window" would allow me to 
 
- - Open
+ - expand/collapse (tabs)
+ - open all
+ - close
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODY0MjQ2NDg4LDExNDk4MjA0MDZdfQ==
+eyJoaXN0b3J5IjpbLTEzMjI1NjQ3OTYsMTE0OTgyMDQwNl19
 -->
