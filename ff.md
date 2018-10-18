@@ -24,13 +24,13 @@ ___
 * Folder: "Play"
 
 ___
-Right-clicking on "Browser Sessions" would allow me to 
+***Right-clicking on "Browser Sessions" would allow me to*** 
 
  - expand/collapse
  - close all
  - create new named folder or session
  
- Right-clicking on a "Folder" would allow me to
+ ***Right-clicking on a "Folder" would allow me to***
  
  - expand/collapse
  - open all
@@ -39,7 +39,7 @@ Right-clicking on "Browser Sessions" would allow me to
  - delete the folder and contents
  - rename folder
 
-Right-clicking on a "Session" would allow me to 
+***Right-clicking on a "Session" would allow me to*** 
 
  - expand/collapse
  - open all windows
@@ -47,7 +47,7 @@ Right-clicking on a "Session" would allow me to
  - rename session
  - 
 
-Right-clicking on a "Window" would allow me to 
+***Right-clicking on a "Window" would allow me to*** 
 
  - expand/collapse (tab list)
  - open all tabs
@@ -64,9 +64,9 @@ Right-clicking on a "Tab" would allow me to
  - duplicate tab
  - rename tab
  
- Please recognize this as a "brainstorming concept" ... not as a
+ Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY5MTA0Nzc2NiwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbLTE2ODYzNDY3NCwxMTQ5ODIwNDA2XX0=
 -->
