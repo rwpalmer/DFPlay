@@ -64,8 +64,9 @@ Right-clicking on a "Tab" would allow me to
  - duplicate tab
  - rename tab
  
+ Please recognize this as a "brainstorming concept" ... not as a
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIzOTAzNDM1OCwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbLTY5MTA0Nzc2NiwxMTQ5ODIwNDA2XX0=
 -->
