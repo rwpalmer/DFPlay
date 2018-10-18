@@ -37,18 +37,19 @@ Right-clicking on "Browser Sessions" would allow me to
  - close all
  - create new named subfolder or session
  - delete the folder and contents
- - rename
+ - rename folder
 
+Right-clicking on a "Session" would allow me to 
 Right-clicking on a "Window" would allow me to 
 
  - expand/collapse (tab list)
  - open
  - close
- - rename
+ - rename window
 
 Right-clicking on a "Tab" would allow me to 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjA1NTgyMTgxLDExNDk4MjA0MDZdfQ==
+eyJoaXN0b3J5IjpbNTk2MTgyMjEzLDExNDk4MjA0MDZdfQ==
 -->
