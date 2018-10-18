@@ -13,10 +13,11 @@ Browser Sessions
 * home
 	* Shopping
 		* Session "POE Video Cameras"
-			* Window : 
+			* Window : Hardware Options
+			* Window : Software Options
 * play
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTcwNjE1MzgwNl19
+eyJoaXN0b3J5IjpbNDE4MjI3OTk3XX0=
 -->
