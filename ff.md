@@ -1,4 +1,4 @@
-My ideal browser would include a session manager that allowed 
+My ideal browser would include a session manager that allowed me to create, save, organize, and destroy
 Browser Sessions
 * Work
 	* Administrative
@@ -25,5 +25,5 @@ Browser Sessions
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE3MDUxMDQzMDRdfQ==
+eyJoaXN0b3J5IjpbLTg3NjMwNzA2Nl19
 -->
