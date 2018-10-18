@@ -1,5 +1,5 @@
 Browser Sessions
-* work
+* Work
 	* Administrative
 	* Projects
 		* Development
@@ -12,16 +12,16 @@ Browser Sessions
 					* Tabs: ...
 		* Research
 		* Other
-* home
+* Home
 	* Shopping
-		* Session "POE Video Cameras"
-			* Window : Hardware Options
-				* Tabs ...
-			* Window : Software Options
-				* Tabs ...
-* play
+		* Session: "POE Video Cameras"
+			* Window: Hardware Options
+				* Tabs: ...
+			* Window: Software Options
+				* Tabs: ...
+* Play
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5NDQ2NDQ2MzFdfQ==
+eyJoaXN0b3J5IjpbLTE5ODY2ODA4ODFdfQ==
 -->
