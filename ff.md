@@ -67,10 +67,10 @@ ___
 
 Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
 
-Personally, I'd also like the ability to override tab names
+Personally, I'd also like the ability to override tab names because the page name returned by many web sites is not meaningful.
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExNjA4NjUzMDQsMjEyNTc0MzMyMCwxMT
-Q5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbMTE1MzU4NjE0NSwyMTI1NzQzMzIwLDExND
+k4MjA0MDZdfQ==
 -->
