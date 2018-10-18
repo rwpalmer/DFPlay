@@ -1,3 +1,4 @@
+My ideal browser would include a session manager that allowed 
 Browser Sessions
 * Work
 	* Administrative
@@ -21,7 +22,8 @@ Browser Sessions
 				* Tabs: ...
 * Play
 
+
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5ODY2ODA4ODFdfQ==
+eyJoaXN0b3J5IjpbLTE3MDUxMDQzMDRdfQ==
 -->
