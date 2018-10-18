@@ -67,10 +67,10 @@ ___
 
 Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
 
-Tab names pose another question. If a tab is generated from a bookmark, do we display the bookmark name or the 
+Personally, I'd also like the ability to override tab names
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTc5ODYxNDU0NywyMTI1NzQzMzIwLDExND
-k4MjA0MDZdfQ==
+eyJoaXN0b3J5IjpbLTExNjA4NjUzMDQsMjEyNTc0MzMyMCwxMT
+Q5ODIwNDA2XX0=
 -->
