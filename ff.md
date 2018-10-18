@@ -62,16 +62,15 @@ ___
  - close tab
  - copy URL
  - duplicate tab
- - rename tab
- 
+  
 "cut/copy/paste" and the ability to drag and drop folders, sessions, windows, and tabs should also be possible. 
 
-When a tab is named, the browse
+When a tab is generated from a bookmark, 
 
 Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgyNzI0NDY5MCwyMTI1NzQzMzIwLDExND
+eyJoaXN0b3J5IjpbLTY3MjI2MDMxOCwyMTI1NzQzMzIwLDExND
 k4MjA0MDZdfQ==
 -->
