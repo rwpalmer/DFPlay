@@ -69,9 +69,9 @@ Personally, I'd also like the ability to override tab names because the page nam
 
 Please recognize all this as a "conceptual brainstorming exercise" ... not something that is fully thought out. 
 
-I am currently trying to figure out how close I can get to the "ideal browser" using FireFox 
+I am currently trying to figure out how close I can get to the "ideal browser" using FireFox and Session Sync. 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjYyNzI0NjQ2LDIxMjU3NDMzMjAsMTE0OT
+eyJoaXN0b3J5IjpbNjkyMTg4MTk4LDIxMjU3NDMzMjAsMTE0OT
 gyMDQwNl19
 -->
