@@ -40,6 +40,12 @@ Right-clicking on "Browser Sessions" would allow me to
  - rename folder
 
 Right-clicking on a "Session" would allow me to 
+
+ - expand/collapse
+ - open
+ - close
+ - rename session
+
 Right-clicking on a "Window" would allow me to 
 
  - expand/collapse (tab list)
@@ -51,5 +57,5 @@ Right-clicking on a "Tab" would allow me to
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTk2MTgyMjEzLDExNDk4MjA0MDZdfQ==
+eyJoaXN0b3J5IjpbLTQ1Mjk4NzM2MywxMTQ5ODIwNDA2XX0=
 -->
