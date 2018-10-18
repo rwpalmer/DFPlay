@@ -65,12 +65,12 @@ ___
   
 "cut/copy/paste" and the ability to drag and drop folders, sessions, windows, and tabs should also be possible. 
 
-When a tab is generated from a bookmark, the bookmark name should be displayed instead of the URL
-
 Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
+
+Tab names is another issue. If a tab is generated from a bookmark, I'd like the option to 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTYxOTg5ODg0OCwyMTI1NzQzMzIwLDExND
+eyJoaXN0b3J5IjpbLTI0MzI0MzY2MCwyMTI1NzQzMzIwLDExND
 k4MjA0MDZdfQ==
 -->
