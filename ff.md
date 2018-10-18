@@ -33,6 +33,7 @@ Right-clicking on "Browser Sessions" would allow me to
  Right-clicking on a "Folder" would allow me to
  
  - expand/collapse
+ - open all
  - close all
  - create new named subfolder or session
  - delete the folder and contents
@@ -40,5 +41,5 @@ Right-clicking on "Browser Sessions" would allow me to
 Right-clicking on a "Window" would allow me to 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU0ODc5NTk0MywxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbLTMyNjM3MjA1NSwxMTQ5ODIwNDA2XX0=
 -->
