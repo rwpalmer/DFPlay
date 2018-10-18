@@ -1,10 +1,10 @@
 My ideal browser would include a session manager that allowed me to create, save, organize, archive, and erase browser sessions as follows.
 ___
 Browser Sessions
-* Work
-	* Administrative
-	* Projects
-		* Development
+* Folder: "Work"
+	* Folder: "Administrative"
+	* Folder: "Projects"
+		* Folder: "Development"
 			* Session: "Pluto 2.1"
 				* Window: "Project Management"
 					* Tabs: ...
@@ -12,7 +12,7 @@ Browser Sessions
 					* Tabs: ...
 				* Window: "Test"
 					* Tabs: ...
-		* Research
+		* Folder: "Research
 		* Other
 * Home
 	* Shopping
@@ -26,5 +26,5 @@ Browser Sessions
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTE0OTgyMDQwNl19
+eyJoaXN0b3J5IjpbOTQ1NDA2NTI0LDExNDk4MjA0MDZdfQ==
 -->
