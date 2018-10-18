@@ -57,7 +57,11 @@ Right-clicking on a "Window" would allow me to
 
 Right-clicking on a "Tab" would allow me to 
 
+ - open tab
+ - open and load tab
+ - rename tab
+
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU1NjE3MDgwNSwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbLTY2NjY2Mjk2OCwxMTQ5ODIwNDA2XX0=
 -->
