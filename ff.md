@@ -37,14 +37,14 @@ ___
  - close all
  - create new named subfolder or session
  - delete the folder and contents
- - rename folder
+ - rename the folder
 
 ***Right-clicking on a "Session" would allow me to*** 
 
  - expand/collapse
  - open all windows
  - close all windows
- - rename session
+ - rename the session
  - 
 
 ***Right-clicking on a "Window" would allow me to*** 
@@ -53,7 +53,7 @@ ___
  - open all tabs
  - open and load all tabs
  - close all tabs
- - rename window
+ - rename the window
 
 ***Right-clicking on a "Tab" would allow me to*** 
 
@@ -65,12 +65,12 @@ ___
   
 "cut/copy/paste" and the ability to drag and drop folders, sessions, windows, and tabs should also be possible. 
 
-Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
-
 Personally, I'd also like the ability to override tab names because the page name returned by many web sites is not meaningful.
+
+Please recognize all this as a "conceptual brainstorming exercise" ... not something that is fully thought out. 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTE1MzU4NjE0NSwyMTI1NzQzMzIwLDExND
-k4MjA0MDZdfQ==
+eyJoaXN0b3J5IjpbNzExNTUzMTA2LDIxMjU3NDMzMjAsMTE0OT
+gyMDQwNl19
 -->
