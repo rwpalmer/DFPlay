@@ -1,4 +1,4 @@
-My vision of an ideal browser would include a session manager that allowed me to create, save, organize, archive, and erase browser  "sessions", "windows", and "tabs" as follows.
+My vision of an ideal browser would include a session manager that allowed me to create, save, organize, archive, and erase browser  "sessions", "windows", and "tabs" ... for example: 
 ___
 **Browser Sessions**
 * Folder: "Work"
@@ -70,6 +70,6 @@ Please recognize this as a "brainstorming concept" ... not something that is ful
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM1NDA2NTQ3MywyMTI1NzQzMzIwLDExND
-k4MjA0MDZdfQ==
+eyJoaXN0b3J5IjpbODg0MjcxODIyLDIxMjU3NDMzMjAsMTE0OT
+gyMDQwNl19
 -->
