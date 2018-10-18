@@ -42,20 +42,22 @@ Right-clicking on "Browser Sessions" would allow me to
 Right-clicking on a "Session" would allow me to 
 
  - expand/collapse
- - open
- - close
+ - open all windows
+ - close all windows
  - rename session
+ - 
 
 Right-clicking on a "Window" would allow me to 
 
  - expand/collapse (tab list)
- - open
- - close
+ - open all tabs
+ - open and load all tabs
+ - close all tabs
  - rename window
 
 Right-clicking on a "Tab" would allow me to 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTQ1Mjk4NzM2MywxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbMTU1NjE3MDgwNSwxMTQ5ODIwNDA2XX0=
 -->
