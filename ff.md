@@ -64,9 +64,10 @@ ___
  - duplicate tab
  - rename tab
  
- Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
+I should also be able to drag and drop folders and 
+Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk1MTUzODE5NiwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbMTU3MDE1MTQ3OSwxMTQ5ODIwNDA2XX0=
 -->
