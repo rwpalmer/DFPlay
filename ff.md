@@ -12,19 +12,19 @@ Browser Sessions
 					* Tabs: ...
 				* Window: "Test"
 					* Tabs: ...
-		* Folder: "Research
-		* Other
-* Home
-	* Shopping
+		* Folder: "Research"
+		* Folder: "Other"
+* Folder: "Home"
+	* Folder: "Shopping"
 		* Session: "POE Video Cameras"
 			* Window: Hardware Options
 				* Tabs: ...
 			* Window: Software Options
 				* Tabs: ...
-* Play
+* Folder: "Play"
 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTQ1NDA2NTI0LDExNDk4MjA0MDZdfQ==
+eyJoaXN0b3J5IjpbMTUwNTA3ODU4MiwxMTQ5ODIwNDA2XX0=
 -->
