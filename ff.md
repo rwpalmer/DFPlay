@@ -4,7 +4,7 @@ Browser Sessions
 	* Administrative
 	* Projects
 		* Development
-			* 
+			* Session "Pluto 2.
 		* Research
 		* Other
 * home
@@ -12,5 +12,5 @@ Browser Sessions
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUxMTkxMTI5OV19
+eyJoaXN0b3J5IjpbMzc0NDcxODY3XX0=
 -->
