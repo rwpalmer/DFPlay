@@ -28,15 +28,16 @@ Right-clicking on "Browser Sessions" would allow me to
 
  - expand/collapse
  - close all
- - create new named Folder or Session
+ - create new named folder or session
  
- Right-clicking on a Folder would allow me to
+ Right-clicking on a "Folder would allow me to
  
  - expand/collapse
  - close all
- - create new named subFolder or Session
+ - create new named subfolder or session
+ - delete the folder and contents
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTgyODc0MTk2MSwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbMTMyMzA4MDUzNywxMTQ5ODIwNDA2XX0=
 -->
