@@ -27,8 +27,10 @@ ___
 Right-clicking on "Browser Sessions" would allow me to 
 
  - expand/collapse
+ - close all
+ - create new (Folder or Session ... prompting for the name of eith
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA5NjM5Mjk3NiwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbLTg4OTk3MjU2MCwxMTQ5ODIwNDA2XX0=
 -->
