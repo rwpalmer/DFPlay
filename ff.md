@@ -67,10 +67,8 @@ ___
 
 Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
 
-Tab names is another issue. If a tab is generated from a bookmark, I'd like the option to 
-
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTI0MzI0MzY2MCwyMTI1NzQzMzIwLDExND
-k4MjA0MDZdfQ==
+eyJoaXN0b3J5IjpbLTEyNTY5MjYxNzAsMjEyNTc0MzMyMCwxMT
+Q5ODIwNDA2XX0=
 -->
