@@ -66,10 +66,12 @@ ___
  
 "cut/copy/paste" and the ability to drag and drop folders, sessions, windows, and tabs should also be possible. 
 
+When a tab is named, the browse
+
 Please recognize this as a "brainstorming concept" ... not something that is full thought out. 
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbODg0MjcxODIyLDIxMjU3NDMzMjAsMTE0OT
-gyMDQwNl19
+eyJoaXN0b3J5IjpbMTgyNzI0NDY5MCwyMTI1NzQzMzIwLDExND
+k4MjA0MDZdfQ==
 -->
