@@ -39,7 +39,10 @@ Right-clicking on "Browser Sessions" would allow me to
  - delete the folder and contents
 
 Right-clicking on a "Window" would allow me to 
+
+ - Open
+
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMyNjM3MjA1NSwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbODY0MjQ2NDg4LDExNDk4MjA0MDZdfQ==
 -->
