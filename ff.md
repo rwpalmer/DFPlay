@@ -1,6 +1,6 @@
 My ideal browser would include a session manager that allowed me to create, save, organize, archive, and erase browser sessions as follows.
 ___
-Browser Sessions
+**Browser Sessions**
 * Folder: "Work"
 	* Folder: "Administrative"
 	* Folder: "Projects"
@@ -23,8 +23,12 @@ Browser Sessions
 				* Tabs: ...
 * Folder: "Play"
 
+___
+Right-clicking on "Browser Sessions" would allow me to 
+
+ - expand/collapse
 
 > Written with [StackEdit](https://stackedit.io/).
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUwNTA3ODU4MiwxMTQ5ODIwNDA2XX0=
+eyJoaXN0b3J5IjpbMjA5NjM5Mjk3NiwxMTQ5ODIwNDA2XX0=
 -->
